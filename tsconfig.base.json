@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@musica/data-access": ["data-access/src/index.ts"],
+      "@musica/data-store": ["data-store/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
