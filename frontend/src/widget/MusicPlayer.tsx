@@ -1,4 +1,7 @@
+import { MusicPlayerControls } from '../components/MusicPlayerControls';
 import { MusicStatusBar } from '../components/MusicStatusBar';
+import { useEffect, useRef } from 'react';
+import useToggle from '../hooks/toggle';
 
 interface IMusicPlayerProps {
   cover: string;
@@ -8,6 +11,23 @@ interface IMusicPlayerProps {
 }
 
 export const MusicPlayer = (music: IMusicPlayerProps) => {
+  const [playing, togglePlay] = useToggle(false);
+  const musicAudioRef = useRef<HTMLAudioElement>(null);
+
+  // TODO: Get the play list of music from the backend
+  // - Use redux and populate the playlist in a redux container
+  const handlerNextMusic = () => { };
+  useEffect(() => {
+    const musicAudio = musicAudioRef.current;
+    if (musicAudio) {
+      if (playing) {
+        musicAudio.play();
+      } else {
+        musicAudio.pause();
+      }
+    }
+  }, [playing]);
+
   return (
     <div className="flex flex-col justify-between items-center bg-black rounded-xl sm:w-2/4 shadow-glass h-[30rem] bg-primary md:w-[390px]">
       <img
@@ -19,8 +39,12 @@ export const MusicPlayer = (music: IMusicPlayerProps) => {
         <span className="text-2xl font-extrabold">{music.name}</span>
         <span className="text-xl font-light">{music.artist}</span>
       </div>
-      <audio src={music.file} controls></audio>
-      <MusicStatusBar status={30} />
+      <audio src={music.file} ref={musicAudioRef}></audio>
+      <MusicStatusBar status="40" duration={120} />
+      <MusicPlayerControls
+        musicPlaying={playing}
+        musicPlayingToggle={togglePlay}
+      />
     </div>
   );
 };
