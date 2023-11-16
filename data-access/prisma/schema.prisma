@@ -20,13 +20,18 @@ model Music {
   artistIds   String[]   @db.ObjectId
   playlists   Playlist[] @relation(fields: [playlistIds], references: [id])
   playlistIds String[]   @db.ObjectId
+  releaseDate DateTime
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Playlist {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  musics   Music[]  @relation(fields: [musicIds], references: [id])
-  musicIds String[] @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  musics    Music[]  @relation(fields: [musicIds], references: [id])
+  musicIds  String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Album {
@@ -36,13 +41,17 @@ model Album {
   musics      Music[]
   artists     Artist[] @relation(fields: [artistIds], references: [id])
   artistIds   String[] @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Artist {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  musics   Music[]  @relation(fields: [musicIds], references: [id])
-  musicIds String[] @db.ObjectId
-  albums   Album[]  @relation(fields: [musicIds], references: [id])
-  albumIds String[] @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  musics    Music[]  @relation(fields: [musicIds], references: [id])
+  musicIds  String[] @db.ObjectId
+  albums    Album[]  @relation(fields: [musicIds], references: [id])
+  albumIds  String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
