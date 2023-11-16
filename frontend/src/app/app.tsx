@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { HomePage } from './pages/home';
+import { HomePage } from '../pages/home';
 
 export function App() {
   return (
@@ -7,7 +7,6 @@ export function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
       </Routes>
-      {/* END: routes */}
     </div>
   );
 }
