@@ -13,14 +13,14 @@ datasource db {
 
 model Music {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  album       Album      @relation(fields: [albumId], references: [id])
-  albumId     String     @db.ObjectId
+  name        String?
+  album       Album?     @relation(fields: [albumId], references: [id])
+  albumId     String?    @db.ObjectId
   artists     Artist[]   @relation(fields: [artistIds], references: [id])
   artistIds   String[]   @db.ObjectId
   playlists   Playlist[] @relation(fields: [playlistIds], references: [id])
   playlistIds String[]   @db.ObjectId
-  releaseDate DateTime
+  releaseDate DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
