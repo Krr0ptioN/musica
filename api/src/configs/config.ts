@@ -14,7 +14,7 @@ const config: Config = {
     enabled: true,
     title: 'Musica API ',
     description: 'Swagger API Documentation server',
-    version: '1.0',
+    version: '1',
     path: 'swg',
     user: 'admin',
     password: '4#2M0!s0D1N#2398@M1N233l',
