@@ -18,10 +18,6 @@ async function bootstrap() {
   // Validation
   app.useGlobalPipes(new ValidationPipe());
 
-  // Prisma Client Exception Filter for unhandled exceptions
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
-
   // Retrieve configuration values using configService
   const configService = app.get(ConfigService);
 
@@ -60,7 +56,7 @@ async function bootstrap() {
   }
 
   // set api version
-  app.setGlobalPrefix('v' + swaggerConfig.version, {
+  app.setGlobalPrefix('api/' + 'v' + swaggerConfig.version, {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
 
@@ -93,8 +89,7 @@ async function bootstrap() {
   // Start the server4
   await app.listen(backendConfig.port);
   Logger.log(
-    `(  ) Application is running on: http://localhost:${backendConfig.port}/${
-      'v' + swaggerConfig.version
+    `(  ) Application is running on: http://localhost:${backendConfig.port}/${'v' + swaggerConfig.version
     }`
   );
 }
