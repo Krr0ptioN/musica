@@ -32,6 +32,9 @@ const config: Config = {
     password: '4#2M0!s0D1N#2398@M1N233l',
     id: 0,
   },
+  storage: {
+    musicStorageDest: '/tmp/musica/musics',
+  },
 };
 
 export default config;
