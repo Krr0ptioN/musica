@@ -23,6 +23,7 @@ model Music {
   releaseDate DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  fileName    String     @unique
 }
 
 model Playlist {
