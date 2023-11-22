@@ -1,4 +1,5 @@
 import { ConfigService } from '@nestjs/config';
+import fs from 'fs';
 import config from '../configs/config';
 
 const configService = new ConfigService();
@@ -15,6 +16,14 @@ import * as path from 'path';
 
 const generateRandomString = (length: number) => {
   return crypto.randomBytes(length / 2).toString('hex');
+};
+
+const uploadDirectoryExistanceAssurance = (dir: string) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    const logger = new Logger(MusicController.name);
+    logger.log(`Directory '${dir}' created successfully.`);
+  }
 };
 
 /** Generating music filename based on music filename
@@ -35,7 +44,8 @@ export function multerDiskStorageDestination(
   file: Express.Multer.File,
   callback: (error: Error | null, destination: string) => void
 ) {
-  const musicStorageDestEnv = configService.get<string>('');
+  const musicStorageDestEnv = configService.get<string>('MUSIC_STORAGE');
+  uploadDirectoryExistanceAssurance(musicStorageDestEnv);
   callback(null, musicStorageDestEnv || config.storage.musicStorageDest);
 }
 
