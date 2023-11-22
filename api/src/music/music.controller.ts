@@ -51,17 +51,20 @@ export class MusicController {
       throw new BadRequestException('No file uploaded');
     }
 
-    const fileName = musicFileName(file);
-    const result = await this.musicService.create({ ...data, fileName });
+    const result = await this.musicService.create({
+      ...data,
+      fileName: file.filename,
+    });
     this.logger.debug(`Request parameters: `, data);
     this.logger.verbose(`MUSIC CREATE | Recieved data client:\n${result}`);
-    this.logger.verbose(`MUSIC CREATE | Music file uploaded: ${fileName}`);
+    this.logger.verbose(`MUSIC CREATE | Music file uploaded: ${file.filename}`);
     return {
       msg: 'Music was successful created',
       success: true,
       data: {
         date: result.createdAt,
-        fileName,
+        fileName: file.filename,
+        id: result.id,
       },
     };
   }
