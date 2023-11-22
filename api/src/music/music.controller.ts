@@ -69,6 +69,11 @@ export class MusicController {
     };
   }
 
+  @Get('file/:id')
+  public async getFile(@Param('id') id: string) {
+    return this.musicService.getMusicFile(id);
+  }
+
   @Get()
   public async findAll(
     @Query('skip') skipQu?: string,
@@ -129,6 +134,7 @@ export class MusicController {
       );
     }
   }
+
   private logRequestParameters(params: Record<string, any>): void {
     const logParams = Object.entries(params)
       .filter(([_, value]) => value !== undefined)
