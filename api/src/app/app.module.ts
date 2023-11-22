@@ -4,7 +4,7 @@ import { CustomPrismaModule } from 'nestjs-prisma';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MusicModule } from '../music/music.module';
-import { PrismaClient } from '@prisma/client/data-access';
+import { PrismaClient } from '@musica/data-access/client';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -20,4 +20,4 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

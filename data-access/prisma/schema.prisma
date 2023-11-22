@@ -2,8 +2,10 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../../node_modules/@prisma/client/data-access"
+  provider        = "prisma-client-js"
+  output          = "../client"
+  binaryTargets   = "native"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
