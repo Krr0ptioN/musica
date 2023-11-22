@@ -1,18 +1,30 @@
 import { ConfigService } from '@nestjs/config';
 import fs from 'fs';
 import config from '../configs/config';
+import crypto from 'crypto';
+import * as path from 'path';
+import { MusicController } from '../music/music.controller';
+import { BadRequestException, Logger } from '@nestjs/common';
 
 const configService = new ConfigService();
 
-export const audioFileFilter = (req, file, callBack) => {
-  if (file.originalname.match(/\.(mp3|ogg|m4a)$/)) {
-    return callBack(new Error('Only audio files are allowed!'), false);
-  }
-  callBack(null, true);
-};
+export const audioFileFilter = (
+  req,
+  file,
+  callback: (error: Error | null, acceptFile: boolean) => void
+) => {
+  const allowedExtensions = ['.mp3', '.ogg', '.m4a'];
+  const ext = path.parse(file.originalname).ext;
 
-import crypto from 'crypto';
-import * as path from 'path';
+  if (allowedExtensions.includes(ext)) {
+    return callback(null, true);
+  } else {
+    return callback(
+      new BadRequestException('Only audio files (mp3, ogg, m4a) are allowed!'),
+      false
+    );
+  }
+};
 
 const generateRandomString = (length: number) => {
   return crypto.randomBytes(length / 2).toString('hex');
