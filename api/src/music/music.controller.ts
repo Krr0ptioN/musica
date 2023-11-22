@@ -8,26 +8,58 @@ import {
   Param,
   Delete,
   Logger,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
 import { MusicService } from './music.service';
-import { Prisma } from '@prisma/client/data-access';
+import { Prisma } from '@musica/data-access/client';
 import valueOrNone from '../utils/value-or-none';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  musicFileName,
+  multerDiskStorageDestination,
+  audioFileFilter,
+  multerDiskStorageFilename,
+} from '../utils/mutler';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Music')
 @Controller('music')
 export class MusicController {
-  constructor(private readonly musicService: MusicService) { }
+  constructor(private readonly musicService: MusicService) {}
 
   private readonly logger = new Logger(MusicService.name);
 
   @Post()
   @ApiOperation({ description: 'Create music' })
-  async create(@Body() data: Prisma.MusicCreateInput) {
-    const result = await this.musicService.create(data);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: multerDiskStorageDestination,
+        filename: multerDiskStorageFilename,
+      }),
+      fileFilter: audioFileFilter,
+    })
+  )
+  async create(
+    @Body() data: Prisma.MusicCreateInput,
+    @UploadedFile()
+    file: Express.Multer.File
+  ) {
+    const fileName = musicFileName(file);
+    const result = await this.musicService.create({ ...data, fileName });
     this.logger.debug(`Request parameters: `, data);
-    this.logger.verbose(`Data Retrived from user query:`, result);
-    return { msg: 'Operation was successful', date: result.createdAt };
+    this.logger.verbose(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.verbose(`MUSIC CREATE | Music file uploaded: ${fileName}`);
+    return {
+      msg: 'Music was successful created',
+      success: true,
+      data: {
+        date: result.createdAt,
+        fileName,
+      },
+    };
   }
 
   @Get()

@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CustomPrismaService } from 'nestjs-prisma';
-import { Prisma, Music, PrismaClient } from '@prisma/client/data-access';
+import { Prisma, Music, PrismaClient } from '@musica/data-access/client';
 
 @Injectable()
 export class MusicService {
   constructor(
     @Inject('DataAccessService')
     private prisma: CustomPrismaService<PrismaClient>
-  ) { }
+  ) {}
 
   create(data: Prisma.MusicCreateInput) {
     return this.prisma.client.music.create({ data });
