@@ -15,7 +15,6 @@ import {
 import { diskStorage } from 'multer';
 import { MusicService } from './music.service';
 import { Prisma } from '@musica/data-access/client';
-import valueOrNone from '../utils/value-or-none';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   musicFileName,
@@ -69,43 +68,71 @@ export class MusicController {
 
   @Get()
   public async findAll(
-    @Query('skip') skipQu?: number,
-    @Query('take') takeQu?: number,
+    @Query('skip') skipQu?: string,
+    @Query('take') takeQu?: string,
     @Query('cursor') cursorQu?: string,
     @Query('where') whereQu?: string,
     @Query('orderBy') orderByQu?: string
   ) {
-    const where: Prisma.MusicWhereUniqueInput = JSON.parse(whereQu);
-    const skip: number = Number(skipQu);
-    const take: number = Number(takeQu);
-    const cursor: Prisma.MusicWhereUniqueInput = JSON.parse(cursorQu);
-    const orderBy: Prisma.MusicOrderByWithRelationInput = JSON.parse(orderByQu);
+    const parsedSkip = this.parseQueryParamNumber(skipQu);
+    const parsedTake = this.parseQueryParamNumber(takeQu, 40);
+    const where = this.parseWhereQueryParam(whereQu);
+    const cursor = this.parseWhereQueryParam(cursorQu);
+    const orderBy = this.parseQueryParamWithRelationInput(orderByQu);
+
     const result = await this.musicService.findAll({
-      skip,
-      take,
+      skip: parsedSkip,
+      take: parsedTake,
       cursor,
       where,
       orderBy,
     });
 
-    // NOTE: Provide debug information about paramaters
-    const logParams = [
-      { name: 'skip', value: skip },
-      { name: 'take', value: take },
-      { name: 'cursor', value: cursor },
-      { name: 'where', value: where },
-      { name: 'orderBy', value: orderBy },
-    ]
-      .filter((param) => param.value !== undefined)
-      .map((param) => `${param.name}: ${valueOrNone(param.value)}`)
-      .join('\n');
-    this.logger.debug(`Request parameters:\n`, logParams);
-    this.logger.verbose(
-      'Data Retrived from user query: ',
-      result[0] ? result[0] : ''
-    );
+    this.logRequestParameters({
+      skip: parsedSkip,
+      take: parsedTake,
+      cursor,
+      where,
+      orderBy,
+    });
 
     return { msg: 'Operation was successful', data: result };
+  }
+
+  private parseQueryParamNumber(
+    value: string | undefined,
+    defaultValue: number = 0
+  ): number {
+    return value ? Number(value) : defaultValue;
+  }
+  private parseWhereQueryParam(
+    value: string | undefined
+  ): Prisma.MusicWhereUniqueInput | undefined {
+    try {
+      return value ? JSON.parse(value) : undefined;
+    } catch (error) {
+      throw new BadRequestException('Invalid JSON provided in query parameter');
+    }
+  }
+
+  private parseQueryParamWithRelationInput(
+    value: string | undefined
+  ): Prisma.MusicOrderByWithRelationInput | undefined {
+    try {
+      return value ? JSON.parse(value) : undefined;
+    } catch (error) {
+      throw new BadRequestException(
+        'Invalid JSON provided in orderBy query parameter'
+      );
+    }
+  }
+  private logRequestParameters(params: Record<string, any>): void {
+    const logParams = Object.entries(params)
+      .filter(([_, value]) => value !== undefined)
+      .map(([name, value]) => `${name}: ${value}`)
+      .join('\n');
+
+    this.logger.debug(`Request parameters:\n${logParams}`);
   }
 
   @Get(':id')
