@@ -10,6 +10,7 @@ import {
   Logger,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { MusicService } from './music.service';
@@ -27,7 +28,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('Music')
 @Controller('music')
 export class MusicController {
-  constructor(private readonly musicService: MusicService) {}
+  constructor(private readonly musicService: MusicService) { }
 
   private readonly logger = new Logger(MusicService.name);
 
@@ -47,6 +48,10 @@ export class MusicController {
     @UploadedFile()
     file: Express.Multer.File
   ) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
     const fileName = musicFileName(file);
     const result = await this.musicService.create({ ...data, fileName });
     this.logger.debug(`Request parameters: `, data);
