@@ -1,8 +1,7 @@
-import { NestFactory, HttpAdapterHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
-import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import config from './configs/config';
 import helmet from 'helmet';
@@ -89,7 +88,8 @@ async function bootstrap() {
   // Start the server4
   await app.listen(backendConfig.port);
   Logger.log(
-    `(  ) Application is running on: http://localhost:${backendConfig.port}/${'v' + swaggerConfig.version
+    `(  ) Application is running on: http://localhost:${backendConfig.port}/${
+      'v' + swaggerConfig.version
     }`
   );
 }
