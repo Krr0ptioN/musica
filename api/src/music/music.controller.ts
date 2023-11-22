@@ -69,12 +69,17 @@ export class MusicController {
 
   @Get()
   public async findAll(
-    @Query('skip') skip?: number,
-    @Query('take') take?: number,
-    @Query('cursor') cursor?: Prisma.MusicWhereUniqueInput,
-    @Query('where') where?: Prisma.MusicWhereUniqueInput,
-    @Query('orderBy') orderBy?: Prisma.MusicOrderByWithRelationInput
+    @Query('skip') skipQu?: number,
+    @Query('take') takeQu?: number,
+    @Query('cursor') cursorQu?: string,
+    @Query('where') whereQu?: string,
+    @Query('orderBy') orderByQu?: string
   ) {
+    const where: Prisma.MusicWhereUniqueInput = JSON.parse(whereQu);
+    const skip: number = Number(skipQu);
+    const take: number = Number(takeQu);
+    const cursor: Prisma.MusicWhereUniqueInput = JSON.parse(cursorQu);
+    const orderBy: Prisma.MusicOrderByWithRelationInput = JSON.parse(orderByQu);
     const result = await this.musicService.findAll({
       skip,
       take,
@@ -100,7 +105,7 @@ export class MusicController {
       result[0] ? result[0] : ''
     );
 
-    return { msg: 'Operation was successful', result };
+    return { msg: 'Operation was successful', data: result };
   }
 
   @Get(':id')
@@ -108,7 +113,7 @@ export class MusicController {
     const result = await this.musicService.findOne({ id });
     this.logger.debug(`Request parameters: ${id}`);
     this.logger.verbose(`Data Retrived from user query:\n${result}`);
-    return { msg: 'Operation was successful', result };
+    return { msg: 'Operation was successful', data: result };
   }
 
   @Patch(':id')
