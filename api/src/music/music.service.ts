@@ -3,7 +3,6 @@ import { CustomPrismaService } from 'nestjs-prisma/dist/custom';
 import { Prisma, Music, PrismaClient } from '@musica/data-access/client';
 import { ConfigService } from '@nestjs/config';
 import config from '../configs/config';
-import { join } from 'path';
 import { createReadStream } from 'fs';
 
 @Injectable()
