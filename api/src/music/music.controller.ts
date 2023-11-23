@@ -17,7 +17,6 @@ import { MusicService } from './music.service';
 import { Prisma } from '@musica/data-access/client';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  musicFileName,
   multerDiskStorageDestination,
   audioFileFilter,
   multerDiskStorageFilename,
@@ -55,11 +54,10 @@ export class MusicController {
       ...data,
       fileName: file.filename,
     });
-    this.logger.debug(`Request parameters: `, data);
-    this.logger.verbose(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
     this.logger.verbose(`MUSIC CREATE | Music file uploaded: ${file.filename}`);
     return {
-      msg: 'Music was successful created',
+      message: 'Music was successfully created',
       success: true,
       data: {
         date: result.createdAt,
@@ -87,24 +85,17 @@ export class MusicController {
     const where = this.parseWhereQueryParam(whereQu);
     const cursor = this.parseWhereQueryParam(cursorQu);
     const orderBy = this.parseQueryParamWithRelationInput(orderByQu);
-
-    const result = await this.musicService.findAll({
+    const params = {
       skip: parsedSkip,
       take: parsedTake,
       cursor,
       where,
       orderBy,
-    });
+    };
+    const result = await this.musicService.findAll(params);
+    this.logRequestParameters(params);
 
-    this.logRequestParameters({
-      skip: parsedSkip,
-      take: parsedTake,
-      cursor,
-      where,
-      orderBy,
-    });
-
-    return { msg: 'Operation was successful', data: result };
+    return { message: 'Operation was successful', data: result };
   }
 
   private parseQueryParamNumber(
@@ -149,7 +140,7 @@ export class MusicController {
     const result = await this.musicService.findOne({ id });
     this.logger.debug(`Request parameters: ${id}`);
     this.logger.verbose(`Data Retrived from user query:\n${result}`);
-    return { msg: 'Operation was successful', data: result };
+    return { message: 'Operation was successful', data: result };
   }
 
   @Patch(':id')
@@ -163,7 +154,7 @@ export class MusicController {
     });
     this.logger.debug(`Request parameters: ${id}`);
     this.logger.verbose(`Music info updated to:\n${result}`);
-    return { msg: 'Music successfully updated', date: result.updatedAt };
+    return { message: 'Music successfully updated', date: result.updatedAt };
   }
 
   @Delete(':id')
@@ -171,6 +162,6 @@ export class MusicController {
     const result = await this.musicService.remove({ id });
     this.logger.debug(`Request parameters: ${id}`);
     this.logger.verbose(`Music successfully deleted:\n${result}`);
-    return { msg: 'Music successfully deleted', date: result.updatedAt };
+    return { message: 'Music successfully deleted', date: result.updatedAt };
   }
 }
