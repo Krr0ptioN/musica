@@ -41,3 +41,5 @@ Thumbs.db
 .nx/cache
 pnpm-lock.yaml
 package-lock.json
+data-access/client
+.env
