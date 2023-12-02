@@ -10,24 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@musica/data-access": [
-        "data-access/client"
-      ],
-      "@musica/data-access/client": [
-        "data-access/client"
-      ]
+      "@musica/api": ["api"],
+      "@musica/data-access": ["data-access/client"],
+      "@musica/data-access/client": ["data-access/client"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
