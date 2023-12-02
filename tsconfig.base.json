@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@musica/api": ["api"],
+      "@musica/data-access": ["data-access/client"],
+      "@musica/data-access/client": ["data-access/client"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

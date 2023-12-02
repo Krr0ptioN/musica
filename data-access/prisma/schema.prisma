@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../client"
+  binaryTargets   = "native"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Music {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  album       Album?     @relation(fields: [albumId], references: [id])
+  albumId     String?    @db.ObjectId
+  artists     Artist[]   @relation(fields: [artistIds], references: [id])
+  artistIds   String[]   @db.ObjectId
+  playlists   Playlist[] @relation(fields: [playlistIds], references: [id])
+  playlistIds String[]   @db.ObjectId
+  releaseDate DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  fileName    String     @unique
+}
+
+model Playlist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  musics    Music[]  @relation(fields: [musicIds], references: [id])
+  musicIds  String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  releaseDate DateTime
+  musics      Music[]
+  artists     Artist[] @relation(fields: [artistIds], references: [id])
+  artistIds   String[] @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Artist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  musics    Music[]  @relation(fields: [musicIds], references: [id])
+  musicIds  String[] @db.ObjectId
+  albums    Album[]  @relation(fields: [musicIds], references: [id])
+  albumIds  String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
