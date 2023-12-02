@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  musica-db:
+    image: mongo:latest
+    container_name: musica-db
+    restart: always
+    ports:
+      - '27017:27017'
+    env_file:
+      - .env
+    volumes:
+      - ./tmp/mongodb_data:/data/db
+  musica-api:
+    image: musica-api:latest
+    container_name: musica-api
+    restart: always
+    depends_on:
+      - musica-db
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+  musica-ui:
+    image: musica-ui:latest
+    container_name: musica-ui
+    depends_on:
+      - musica-api
+    restart: always
+    ports:
+      - '4200:4200'
+    env_file:
+      - .env
+volumes:
+  pg_data:
+    name: musica-db
