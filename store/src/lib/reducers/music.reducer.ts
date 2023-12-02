@@ -1,13 +1,13 @@
 import { Music } from '@musica/types';
 import { ActionTypes } from '../constants/action-type';
 
-interface MusicsState {
+export interface MusicsState {
   playing: boolean;
   selectedMusic: number;
   musics: Music[];
 }
 
-interface Action {
+export interface Action {
   type: string;
   payload?: string;
 }

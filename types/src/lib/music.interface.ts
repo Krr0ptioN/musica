@@ -1,9 +1,9 @@
 export interface Music {
-  artists: string[] | null;
-  album: string | null;
+  artists: string[] | undefined;
+  album: string | undefined;
   name: string;
-  file: File | null;
+  file: string | undefined;
   fileName: string;
-  playlists: string[] | null;
+  playlists: string[] | undefined;
   id: string;
 }
