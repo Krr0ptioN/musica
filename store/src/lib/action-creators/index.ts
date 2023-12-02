@@ -13,10 +13,10 @@ export const getAllMusics = () => {
       });
       const blobData: Blob = response.data;
 
-      const file: File = new File([blobData], obj.fileName, {
+      const fileBlob: File = new File([blobData], obj.fileName, {
         type: 'audio/mpeg',
       });
-
+      const fileURL = URL.createObjectURL(fileBlob);
       const music: Music = {
         artists: obj.artistIds,
         album: obj.albumIds,
@@ -24,13 +24,49 @@ export const getAllMusics = () => {
         playlists: obj.playlistIds,
         fileName: obj.fileName,
         id: obj.id,
-        file,
+        file: fileURL,
       };
 
       dispatch({
         type: ActionTypes.ADD_MUSIC,
         payload: { music },
       });
+    });
+  };
+};
+
+export const playCurrentMusic = () => {
+  return async (dispatch: Dispatch<MusicAction>) => {
+    dispatch({
+      type: ActionTypes.PLAY_MUSIC,
+      payload: {},
+    });
+  };
+};
+
+export const pauseCurrentMusic = () => {
+  return async (dispatch: Dispatch<MusicAction>) => {
+    dispatch({
+      type: ActionTypes.PAUSE_MUSIC,
+      payload: {},
+    });
+  };
+};
+
+export const playNextMusic = () => {
+  return async (dispatch: Dispatch<MusicAction>) => {
+    dispatch({
+      type: ActionTypes.NEXT_MUSIC,
+      payload: {},
+    });
+  };
+};
+
+export const playPrevMusic = () => {
+  return async (dispatch: Dispatch<MusicAction>) => {
+    dispatch({
+      type: ActionTypes.PREV_MUSIC,
+      payload: {},
     });
   };
 };
