@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    background-color: #505050;
+    border-radius: 7px;
+    outline: none;
+    @apply drop-shadow-lg;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 19px;
+    width: 19px;
+    background-color: white;
+    border-radius: 100%;
+    border: #505050 1px solid;
+    cursor: pointer;
+    @apply drop-shadow-lg;
+  }
+
+  .slider::-moz-range-thumb {
+    height: 19px;
+    width: 19px;
+    background-color: BMwhite;
+    border-radius: 100%;
+    border: #505050 1px solid;
+    cursor: pointer;
+    @apply drop-shadow-lg;
+  }
+}

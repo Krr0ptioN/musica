@@ -1,5 +1,5 @@
 export interface Music {
-  artists: string[] | undefined;
+  artists: string[];
   album: string | undefined;
   name: string;
   file: string | undefined;

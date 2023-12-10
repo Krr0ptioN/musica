@@ -1,4 +1,5 @@
 import react, { useEffect } from 'react';
+import { Btn } from './Btn';
 
 interface MusicPlayerControlProps {
   musicPlaying: boolean | (() => void);
@@ -13,54 +14,32 @@ export const MusicPlayerControls: React.FC<MusicPlayerControlProps> = ({
   musicPlayingNext,
   musicPlayingPrev,
 }) => {
-  const togglePlayIcon = () => {
-    if (musicPlaying) {
-      document
-        .getElementById('play-btn')
-        ?.classList.replace('fa-play', 'fa-pause');
-    } else {
-      document
-        .getElementById('play-btn')
-        ?.classList.replace('fa-pause', 'fa-play');
-    }
-  };
-
-  useEffect(togglePlayIcon, [musicPlaying]);
-
-  const handleTogglePlay = () => {
-    if (typeof musicPlayingToggle === 'function') {
-      musicPlayingToggle();
-    }
-  };
-
-  const handleNextPlay = () => {
-    if (typeof musicPlayingToggle === 'function') {
-      musicPlayingNext();
-    }
-  };
-  const handlePrevPlay = () => {
-    if (typeof musicPlayingToggle === 'function') {
-      musicPlayingPrev();
-    }
-  };
   return (
-    <div className="flex relative flex-row justify-center items-center -top-[10px]">
-      <i
-        className="p-3 text-4xl hover:text-gray-700 fas fa-backward"
+    <div className="flex relative flex-row justify-center items-center -top-[20px]">
+      <Btn
+        className="text-4xl fas fa-backward"
         title="previous"
-        onClick={handlePrevPlay}
-      ></i>
-      <i
-        className="p-3 text-6xl hover:text-gray-700 fas fa-play"
-        id="play-btn"
-        onClick={handleTogglePlay}
-        title="play"
-      ></i>
-      <i
-        className="p-3 text-4xl hover:text-gray-700 fas fa-forward"
-        onClick={handleNextPlay}
+        handlerOnClick={musicPlayingPrev}
+      ></Btn>
+
+      {musicPlaying ? (
+        <Btn
+          className="text-6xl fas fa-pause"
+          handlerOnClick={musicPlayingToggle}
+          title="pause"
+        ></Btn>
+      ) : (
+        <Btn
+          className="text-6xl fas fa-play"
+          handlerOnClick={musicPlayingToggle}
+          title="play"
+        ></Btn>
+      )}
+      <Btn
+        className="text-4xl fas fa-forward"
+        handlerOnClick={musicPlayingNext}
         title="next"
-      ></i>
+      ></Btn>
     </div>
   );
 };
