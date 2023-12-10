@@ -28,7 +28,7 @@ export const MusicPlayer = () => {
 
   const loadMusicsFromBackend = async () => {
     if (musics.length === 0) {
-      await getAllMusics(); // Assuming getAllMusics is an async action
+      getAllMusics();
       setLoading(false);
     }
   };
