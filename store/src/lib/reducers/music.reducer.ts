@@ -67,6 +67,9 @@ export const musicReducer = (
         musics: state.musics,
         playing: true,
         selectedMusic: state.selectedMusic,
+    case ActionTypes.CLEAR_ALL_MUSICS:
+      return {
+        ...musicInitialState,
       };
 
     case ActionTypes.SELECT_MUSIC:
@@ -78,7 +81,10 @@ export const musicReducer = (
       };
 
     case ActionTypes.ADD_MUSIC:
-      if (newMusicToAdd) {
+      if (
+        newMusicToAdd &&
+        !state.musics.find((music) => music.id === newMusicToAdd.id)
+      ) {
         return {
           ...state,
           musics: [...state.musics, newMusicToAdd],
