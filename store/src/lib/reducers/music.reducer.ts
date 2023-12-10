@@ -40,33 +40,27 @@ export const musicReducer = (
     case ActionTypes.NEXT_MUSIC:
       return {
         ...state,
-        musics: state.musics,
-        playing: state.playing,
         selectedMusic: state.selectedMusic + 1,
       };
 
     case ActionTypes.PREV_MUSIC:
       return {
         ...state,
-        musics: state.musics,
-        playing: state.playing,
         selectedMusic: state.selectedMusic - 1,
       };
 
     case ActionTypes.PAUSE_MUSIC:
       return {
         ...state,
-        musics: state.musics,
         playing: false,
-        selectedMusic: state.selectedMusic,
       };
 
     case ActionTypes.PLAY_MUSIC:
       return {
         ...state,
-        musics: state.musics,
         playing: true,
-        selectedMusic: state.selectedMusic,
+      };
+
     case ActionTypes.CLEAR_ALL_MUSICS:
       return {
         ...musicInitialState,
@@ -108,8 +102,6 @@ export const musicReducer = (
         return {
           ...state,
           musics: updatedMusics,
-          playing: state.playing,
-          selectedMusic: state.selectedMusic,
         };
       } else {
         return state;
