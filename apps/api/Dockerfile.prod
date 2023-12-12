@@ -1,0 +1,31 @@
+# Stage 1: Build the application
+FROM node:18-alpine AS build
+WORKDIR /app
+
+COPY ./ ./
+
+ARG PORT_API
+ARG HOST_API
+
+ENV PORT_API=${PORT_API}
+ENV HOST_API=${HOST_API}
+ENV NX_DAEMON=false
+
+RUN npm install -g pnpm && pnpm install
+
+COPY . .
+
+RUN npx nx build api
+
+# Stage 2: Create the production image
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist/api ./dist/api
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+
+EXPOSE ${PORT_API}
+
+CMD ["npx","nx", "serve", "api"]

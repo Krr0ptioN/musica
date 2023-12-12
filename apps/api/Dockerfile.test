@@ -1,0 +1,31 @@
+# Stage 1: Build the application
+FROM node:14-alpine AS build
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
+ARG PORT_API
+ARG HOST_API
+
+ENV PORT_API=${PORT_API}
+ENV HOST_API=${HOST_API}
+
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
+
+COPY . .
+
+RUN pnpm run nx build api
+
+# Stage 2: Create the production image
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist/api ./dist/api
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/pnpm-lock.yaml ./pnpm-lock.yaml
+
+EXPOSE ${PORT_API}
+
+CMD ["pnpm", "run", "nx", "serve", "api"]
