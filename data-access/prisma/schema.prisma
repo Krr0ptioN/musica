@@ -4,7 +4,7 @@
 generator client {
   provider        = "prisma-client-js"
   output          = "../client"
-  binaryTargets   = "native"
+  engineType      = "binary"
   previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
