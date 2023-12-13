@@ -1,31 +1,39 @@
 # Stage 1: Build the application
-FROM node:14-alpine AS build
+FROM node:20-bullseye AS build
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY ./ ./
 
 ARG PORT_API
 ARG HOST_API
+ARG DATABASE_URL
+ARG MUSIC_STORAGE
 
 ENV PORT_API=${PORT_API}
 ENV HOST_API=${HOST_API}
+ENV DATABASE_URL=${DATABASE_URL}
+ENV MUSIC_STORAGE=${MUSIC_STORAGE}
+ENV NX_DAEMON=false
 
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+RUN npm install -g pnpm && pnpm install
 
 COPY . .
 
-RUN pnpm run nx build api
+RUN npx nx run api:build:development
 
 # Stage 2: Create the production image
-FROM node:14-alpine
+FROM node:20-bullseye
 
 WORKDIR /app
 
-COPY --from=build /app/dist/api ./dist/api
+COPY --from=build /app/dist/apps/api ./dist/apps/api
+COPY --from=build /app/data-access ./data-access
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/pnpm-lock.yaml ./pnpm-lock.yaml
+
+# Fix  Query Engine for runtime "debian-openssl-1.1.x"
+COPY data-access/client/libquery_engine-debian-openssl-1.1.x.so.node ./dist/apps/
 
 EXPOSE ${PORT_API}
 
-CMD ["pnpm", "run", "nx", "serve", "api"]
+CMD ["node", "dist/apps/api/main.js"]
