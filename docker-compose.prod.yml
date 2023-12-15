@@ -17,19 +17,21 @@ services:
     depends_on:
       - musica-db
     ports:
-      - '3000:3000'
+      - $PORT_API:$PORT_API
     env_file:
       - .env
-  musica-ui:
-    image: musica-ui:latest
+  musica-frontend:
+    image: musica-frontend:latest
     container_name: musica-ui
     depends_on:
       - musica-api
     restart: always
     ports:
-      - '4200:4200'
+      - $PORT_FRONTEND:$PORT_FRONTEND
     env_file:
       - .env
 volumes:
-  pg_data:
+  musica-db_data:
     name: musica-db
+  musica-blob_data:
+    name: musica-storage
