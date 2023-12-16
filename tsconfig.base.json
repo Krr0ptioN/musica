@@ -22,19 +22,19 @@
         "api"
       ],
       "@musica/data-access": [
-        "data-access/client"
+        "packages/data-access/client"
       ],
       "@musica/data-access/client": [
-        "data-access/client"
+        "packages/data-access/client"
       ],
       "@musica/types": [
-        "types/src/index"
+        "libs/types/src/index"
       ],
       "@musica/utils": [
-        "utils/src/index"
+        "libs/utils/src/index"
       ],
       "@musica/store": [
-        "store/src/index"
+        "packages/store/src/index"
       ]
     }
   },
