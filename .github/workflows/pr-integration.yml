@@ -1,0 +1,31 @@
+name: Pull Request Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use PNPM
+        run: npm install -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Lint and Test API
+        run: |
+          npx nx test api
+          npx nx lint api
+
+      - name: Build API docker image
+        run: npm run build:api
+
+      - name: Run Integration Tests (React)
+        run: npm run test:integration:react
