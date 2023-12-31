@@ -1,7 +1,7 @@
 {
   "name": "data-access",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/data-access/src",
+  "sourceRoot": "data-access/src",
   "projectType": "library",
   "targets": {
     "prisma": {

@@ -10,18 +10,36 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@musica/api": ["api"],
-      "@musica/data-access": ["packages/data-access/client"],
-      "@musica/data-access/client": ["packages/data-access/client"],
-      "@musica/store": ["packages/store/src/index"],
-      "@musica/types": ["libs/types/src/index"],
-      "@musica/utils": ["libs/utils/src/index"]
+      "@musica/api": [
+        "apps/api"
+      ],
+      "@musica/data-access": [
+        "packages/data-access/client"
+      ],
+      "@musica/data-access/client": [
+        "packages/data-access/client"
+      ],
+      "@musica/store": [
+        "packages/store/src/index"
+      ],
+      "@musica/types": [
+        "libs/types/src/index"
+      ],
+      "@musica/utils": [
+        "libs/utils/src/index"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
