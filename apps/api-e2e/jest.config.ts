@@ -15,5 +15,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/e2e/api',
+  coverageDirectory: '../../coverage/apps/api-e2e',
 };
