@@ -4,6 +4,7 @@ import { MockData } from '../mock-data';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
+import { PrismaClient } from '@musica/data-access';
 
 describe('Music Module', () => {
   let app: INestApplication;

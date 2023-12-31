@@ -1,4 +1,4 @@
-export let MockData = {
+export const MockData = {
   musicCreation: {
     invalidMusicFile: {
       filepath: 'api-e2e/assets/non-audio-file.png',
