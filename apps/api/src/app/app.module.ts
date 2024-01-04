@@ -1,18 +1,21 @@
 import { Module } from '@nestjs/common';
-
-import { CustomPrismaModule } from 'nestjs-prisma/dist/custom';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MusicModule } from '../music/music.module';
-import { PrismaClient } from '@musica/data-access/client';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    CustomPrismaModule.forRoot({
-      name: 'DataAccessService',
-      client: new PrismaClient(),
-      isGlobal: true,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const uri = configService.get('MONGO_URI');
+        return {
+          uri,
+        };
+      },
+      inject: [ConfigService],
     }),
     MusicModule,
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
