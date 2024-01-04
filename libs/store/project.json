@@ -1,7 +1,7 @@
 {
   "name": "store",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/store/src",
+  "sourceRoot": "libs/store/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -14,7 +14,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/store"
+        "outputPath": "dist/libs/store"
       },
       "configurations": {
         "development": {
