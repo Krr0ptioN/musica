@@ -10,8 +10,7 @@
 [Installation](#installation) •
 [Configuration](#configuration) •
 [Integrations](#third-party-integrations) •
-[Contribution](#contribution) •
-[License](#license) •
+[How to Contribution](#contribution)
 
 <div align="center">
 Musica is a web application designed to provide users with a
@@ -62,10 +61,8 @@ upload music and download music from services such as Youtube, and enjoy a tailo
 
 ## Integrations
 
-## Contribution
+## How to Contribution
 
 Contributions are welcome! If you'd like to contribute to Musica,
 follow the [Contribution guideline](/CONTRIBUTION.md) and
 [Development guideline](/DEVELOPMENT.md). Checkout the projects and boards.
-
-## License
