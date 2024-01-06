@@ -58,8 +58,8 @@ jobs:
         with:
           db-connection-env-var: MONGO_URI
           run-command: yarn use:database
-          binary-version: 4.4.6
-          instance-dbName: validation
+          binary-version: 7.0.0
+          instance-dbName: musica-runner-test
           instance-port: 27017
           instance-storageEngine: wiredTiger
           mongoms-debug: 1
