@@ -6,12 +6,12 @@ COPY ./ ./
 
 ARG PORT_API
 ARG HOST_API
-ARG DATABASE_URL
+ARG MONGO_URI
 ARG MUSIC_STORAGE
 
 ENV PORT_API=${PORT_API}
 ENV HOST_API=${HOST_API}
-ENV DATABASE_URL=${DATABASE_URL}
+ENV MONGO_URI=${MONGO_URI}
 ENV MUSIC_STORAGE=${MUSIC_STORAGE}
 ENV NX_DAEMON=false
 
@@ -27,12 +27,9 @@ FROM node:20-bullseye
 WORKDIR /app
 
 COPY --from=build /app/dist/apps/api ./dist/apps/api
-COPY --from=build /app/data-access ./data-access
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 
-# Fix  Query Engine for runtime "debian-openssl-1.1.x"
-COPY data-access/client/libquery_engine-debian-openssl-1.1.x.so.node ./dist/apps/
 
 EXPOSE ${PORT_API}
 
