@@ -2,7 +2,9 @@
   "name": "@musica/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dkr-build-api": "sh ./scripts/dkr-build-api.sh"
+  },
   "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
