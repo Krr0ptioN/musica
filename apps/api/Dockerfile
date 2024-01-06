@@ -2,8 +2,7 @@
 FROM node:20-bullseye AS build
 WORKDIR /app
 
-COPY ./ ./
-COPY package.json pnpm-lock.json* /app/
+COPY ./../../ ./
 
 ARG PORT_API
 ARG HOST_API
@@ -16,7 +15,8 @@ ENV MONGO_URI=${MONGO_URI}
 ENV MUSIC_STORAGE=${MUSIC_STORAGE}
 ENV NX_DAEMON=false
 
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g pnpm
+RUN pnpm install
 
 COPY . .
 
