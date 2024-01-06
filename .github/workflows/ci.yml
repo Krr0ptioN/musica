@@ -53,8 +53,21 @@ jobs:
       - name: 'Install Dependencies'
         run: pnpm install
 
+      - name: 'Setup MongoDB Memory Server'
+        uses: neofinancial/mongo-memory-server-action@v1.0.2
+        with:
+          db-connection-env-var: MONGO_URI
+          run-command: yarn use:database
+          binary-version: 4.4.6
+          instance-dbName: validation
+          instance-port: 27017
+          instance-storageEngine: wiredTiger
+          mongoms-debug: 1
+
       - name: 'Unit Test API'
         run: npx nx test api
+        env:
+          INSIDE_ACTION_RUNNER: true
 
       - name: 'E2E Test API'
         run: npx nx e2e api-e2e

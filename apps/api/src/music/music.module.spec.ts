@@ -16,7 +16,8 @@ describe('Music Module', () => {
   let musicService: MusicService;
 
   beforeAll(async () => {
-    mongoMemoryServerSetup();
+    if (!process.env.INSIDE_ACTION_RUNNER)
+      mongoMemoryServerSetup();
     jest.resetModules();
 
     const moduleRef = await Test.createTestingModule({
@@ -168,6 +169,7 @@ describe('Music Module', () => {
 
   afterAll(async () => {
     await app.close();
-    await mongoMemoryServerTeardown();
+    if (!process.env.INSIDE_ACTION_RUNNER)
+      await mongoMemoryServerTeardown();
   });
 });
