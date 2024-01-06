@@ -3,6 +3,7 @@ FROM node:20-bullseye AS build
 WORKDIR /app
 
 COPY ./ ./
+COPY package.json pnpm-lock.json* /app/
 
 ARG PORT_API
 ARG HOST_API
