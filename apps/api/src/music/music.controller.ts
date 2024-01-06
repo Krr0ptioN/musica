@@ -10,8 +10,6 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { MusicService } from './music.service';

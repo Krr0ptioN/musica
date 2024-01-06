@@ -1,7 +1,5 @@
 import {
-  BadRequestException,
   Injectable,
-  Logger,
   ServiceUnavailableException,
   StreamableFile,
 } from '@nestjs/common';
@@ -25,7 +23,6 @@ export class MusicService {
     private readonly configService: ConfigService
   ) { }
 
-  private readonly logger = new Logger(MusicService.name);
 
   async create(data: CreateMusicWithFilenameDto): Promise<Music> {
     const newMusic = new this.musicModel(data);
@@ -83,7 +80,7 @@ export class MusicService {
     }
   }
 
-  async removeAllMusic(): Promise<any> {
+  async removeAllMusic() {
     try {
       return await this.musicModel.deleteMany({});
     } catch (error) {
