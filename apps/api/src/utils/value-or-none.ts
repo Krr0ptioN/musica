@@ -1,3 +1,3 @@
-export default function valueOrNone(value: any): any | string {
+export default function valueOrNone<T>(value: T): T | string {
   return value !== undefined ? value : 'none';
 }
