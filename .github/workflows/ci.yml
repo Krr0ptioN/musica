@@ -57,7 +57,6 @@ jobs:
         uses: neofinancial/mongo-memory-server-action@v1.0.2
         with:
           db-connection-env-var: MONGO_URI
-          run-command: yarn use:database
           binary-version: 7.0.0
           instance-dbName: musica-runner-test
           instance-port: 27017
