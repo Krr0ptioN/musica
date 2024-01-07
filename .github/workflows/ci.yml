@@ -53,20 +53,16 @@ jobs:
       - name: 'Install Dependencies'
         run: pnpm install
 
-      - name: 'Setup MongoDB Memory Server'
-        uses: neofinancial/mongo-memory-server-action@v1.0.2
+      - name: 'Launch MongoDB'
+        uses: wbari/start-mongoDB@v0.2
         with:
-          db-connection-env-var: MONGO_URI
-          binary-version: 7.0.0
-          instance-dbName: musica-runner-test
-          instance-port: 27017
-          instance-storageEngine: wiredTiger
-          mongoms-debug: 1
+          mongoDBVersion: 4.0
 
       - name: 'Unit Test API'
         run: npx nx test api
         env:
           INSIDE_ACTION_RUNNER: true
+          MONGO_URI: 'mongodb://localhost:27017/musica'
 
       - name: 'E2E Test API'
         run: npx nx e2e api-e2e
