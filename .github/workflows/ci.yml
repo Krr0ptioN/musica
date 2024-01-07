@@ -63,6 +63,7 @@ jobs:
         env:
           INSIDE_ACTION_RUNNER: true
           MONGO_URI: 'mongodb://localhost:27017/musica'
+          MUSIC_STORAGE: '/tmp/musica/musics'
 
       - name: 'E2E Test API'
         run: npx nx e2e api-e2e
