@@ -44,3 +44,4 @@ package-lock.json
 
 data-access/client
 .env
+packages/data-access/client

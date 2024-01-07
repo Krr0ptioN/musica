@@ -1,0 +1,73 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Use PNPM'
+        run: npm install -g pnpm
+
+      - name: 'Install Dependencies'
+        run: pnpm install
+
+      - name: Lint API
+        run: npx nx lint api
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Use PNPM'
+        run: npm install -g pnpm
+
+      - name: 'Install Dependencies'
+        run: pnpm install
+
+      - name: 'Production Build'
+        run: npx nx build api
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [lint, build]
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Use PNPM'
+        run: npm install -g pnpm
+
+      - name: 'Install Dependencies'
+        run: pnpm install
+
+      - name: 'Launch MongoDB'
+        uses: wbari/start-mongoDB@v0.2
+        with:
+          mongoDBVersion: 4.0
+
+      - name: 'Unit Test API'
+        run: npx nx test api
+        env:
+          INSIDE_ACTION_RUNNER: true
+          MONGO_URI: 'mongodb://localhost:27017/musica'
+          MUSIC_STORAGE: '/tmp/musica/musics'
+
+      - name: 'E2E Test API'
+        run: npx nx e2e api-e2e
+        env:
+          INSIDE_ACTION_RUNNER: true
+          MONGO_URI: 'mongodb://localhost:27017/musica'
+          MUSIC_STORAGE: '/tmp/musica/musics'
