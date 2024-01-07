@@ -2,7 +2,7 @@
 FROM node:20-bullseye AS build
 WORKDIR /app
 
-COPY ./../../ ./
+COPY ./ ./
 
 ARG PORT_API
 ARG HOST_API
