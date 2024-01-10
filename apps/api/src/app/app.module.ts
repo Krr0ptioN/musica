@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MusicModule } from '../music/music.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CoreModule } from '@musica/core';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [ConfigService],
     }),
     MusicModule,
-    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    CoreModule,
   ],
   controllers: [AppController],
   providers: [AppService],
