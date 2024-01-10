@@ -13,8 +13,6 @@ export const validationSchema = Joi.object({
     .optional()
     .default('Swagger API Documentation server'),
   SWAGGER_PATH: Joi.string().optional().default('swg'),
-  SWAGGER_USER: Joi.string().optional().default('admin'),
-  SWAGGER_PASSWORD: Joi.string().optional().default('4#2M0!s0D1N#2398@M1N233l'),
 
   // Security
   CORS_ENABLED: Joi.boolean().optional().default(true),
