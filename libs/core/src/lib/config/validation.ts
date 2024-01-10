@@ -17,8 +17,8 @@ export const validationSchema = Joi.object({
   SWAGGER_PASSWORD: Joi.string().optional().default('4#2M0!s0D1N#2398@M1N233l'),
 
   // Security
-  CORS_ENABLED: Joi.boolean().optional(),
-  HELMET_ENABLED: Joi.boolean().optional(),
+  CORS_ENABLED: Joi.boolean().optional().default(true),
+  HELMET_ENABLED: Joi.boolean().optional().default(true),
   JWT_EXPIRES_IN: Joi.string().optional().default('5m'),
   JWT_REFRESH_IN: Joi.string().optional().default('7d'),
   BCRYPT_SALT_ROUND: Joi.number().optional().default(10),
