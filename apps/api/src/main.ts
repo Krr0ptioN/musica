@@ -9,8 +9,7 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import helmet from 'helmet';
-import { ENV_NAME } from '@musica/core';
-import { setupSwagger } from '@musica/core';
+import { ENV_NAME, setupSwagger } from '@musica/core';
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);

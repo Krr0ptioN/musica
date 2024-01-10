@@ -4,7 +4,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createReadStream } from 'fs';
+import { createReadStream, unlink } from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { MUSIC_SCHEMA_MODEL, Music } from '@musica/database-models';
 import { Model } from 'mongoose';
@@ -14,7 +14,6 @@ import {
 } from './dto/create-music.dto';
 import { UpdateMusicWithFilenameDto } from './dto/update-music.dto';
 import { ENV_NAME } from '@musica/core';
-import fs from 'fs';
 
 @Injectable()
 export class MusicService {
@@ -83,13 +82,13 @@ export class MusicService {
       this.configService.get(ENV_NAME.STORAGE_DEST) +
       '/covers/' +
       music.coverImageFileName;
-    fs.unlink(audioFilePath, (err) => {
+    unlink(audioFilePath, (err) => {
       if (err) {
         throw err;
       }
       console.log('File is deleted.');
     });
-    fs.unlink(coverFilePath, (err) => {
+    unlink(coverFilePath, (err) => {
       if (err) {
         throw err;
       }
