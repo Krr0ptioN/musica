@@ -50,7 +50,7 @@ describe('Music Module', () => {
       const res = await request(app.getHttpServer())
         .post('/musics')
         .send({ name: 'Music', releaseDate: new Date(Date.now()) });
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(201);
       expect(res.body.message).toBe('Music was successfully created');
     });
   });
@@ -129,7 +129,7 @@ describe('Music Module', () => {
           'assets/mock-data/musics-cover/android-chrome-512x512.png'
         );
 
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(200);
       expect(res.body.data.coverImageFileName).toBeDefined();
     });
   });
