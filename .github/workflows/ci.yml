@@ -73,3 +73,20 @@ jobs:
           MONGO_URI: 'mongodb://localhost:27017/musica'
           STORAGE_DEST: '/tmp/musica'
           PORT_API: 3000
+
+  code-analysis:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=mrdn
+            -Dsonar.projectKey=musica
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
