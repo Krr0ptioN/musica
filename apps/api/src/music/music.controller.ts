@@ -83,7 +83,7 @@ export class MusicController {
       message: 'Music was successfully created',
       success: true,
       data: {
-        musicAudioFile: musicAudioFileName.filename,
+        musicAudioFileName: musicAudioFileName.filename,
         id: result.id,
       },
     };
@@ -94,7 +94,7 @@ export class MusicController {
     description: 'Upload music cover image file for a specific music',
   })
   @UseInterceptors(
-    FileInterceptor('coverImageFile', {
+    FileInterceptor('coverImageFileName', {
       storage: diskStorage({
         destination: multerDiskStorageMusicCoverFileImageDestination,
         filename: multerDiskStorageFilename,
@@ -112,7 +112,7 @@ export class MusicController {
     }
 
     const result = await this.musicService.update(id, {
-      musicAudioFileName: coverImageFileName.filename,
+      coverImageFileName: coverImageFileName.filename,
     });
 
     this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
