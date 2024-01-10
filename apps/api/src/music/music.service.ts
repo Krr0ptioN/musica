@@ -15,6 +15,7 @@ import {
 } from './dto/create-music.dto';
 import { UpdateMusicWithFilenameDto } from './dto/update-music.dto';
 import { ENV_NAME } from '@musica/core';
+import path from 'path';
 
 @Injectable()
 export class MusicService {
@@ -34,19 +35,21 @@ export class MusicService {
 
   async getMusicAudioFile(id: string): Promise<StreamableFile> {
     const music = await this.musicModel.findById(id);
-    const filePath =
-      this.configService.get(ENV_NAME.STORAGE_DEST) +
-      '/musics/' +
-      music.musicAudioFileName;
+    const filePath = path.join(
+      this.configService.get(ENV_NAME.STORAGE_DEST),
+      'musics',
+      music.musicAudioFileName
+    );
     return new StreamableFile(createReadStream(filePath));
   }
 
   async getMusicCoverImageFile(id: string): Promise<StreamableFile> {
     const music = await this.musicModel.findById(id);
-    const filePath =
-      this.configService.get(ENV_NAME.STORAGE_DEST) +
-      '/covers/' +
-      music.coverImageFileName;
+    const filePath = path.join(
+      this.configService.get(ENV_NAME.STORAGE_DEST),
+      'covers',
+      music.coverImageFileName
+    );
     return new StreamableFile(createReadStream(filePath));
   }
 
@@ -77,13 +80,17 @@ export class MusicService {
   }
 
   private purgeAssociatedFiles(music: Music) {
-    const audioFilePath = `${this.configService.get(
-      ENV_NAME.STORAGE_DEST
-    )}/musics/${music.musicAudioFileName}`;
+    const audioFilePath = path.join(
+      this.configService.get(ENV_NAME.STORAGE_DEST),
+      'musics',
+      music.musicAudioFileName
+    );
 
-    const coverFilePath = `${this.configService.get(
-      ENV_NAME.STORAGE_DEST
-    )}/covers/${music.coverImageFileName}`;
+    const coverFilePath = path.join(
+      this.configService.get(ENV_NAME.STORAGE_DEST),
+      'covers',
+      music.coverImageFileName
+    );
 
     unlink(audioFilePath, (err) => {
       if (err) throw err;
