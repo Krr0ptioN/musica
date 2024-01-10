@@ -73,7 +73,8 @@ export const getAllMusics = () => {
   };
 };
 
-// TODO: Add music action creator for creating and adding music to library
+// TODO: Add music action creator for creating and adding music to library #15
+// - [ ] Refactor the below code by moving them to their own file
 
 export const clearAllMusic = () => {
   return async (dispatch: Dispatch<MusicAction>) => {
