@@ -123,7 +123,7 @@ export class MusicController {
       message: 'Music was successfully created',
       success: true,
       data: {
-        musicAudioFile: coverImageFileName.filename,
+        coverImageFileName: coverImageFileName.filename,
         id: result.id,
       },
     };
