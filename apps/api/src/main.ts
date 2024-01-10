@@ -15,7 +15,6 @@ import { setupSwagger } from '@musica/core';
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);
 
-  // Validation
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
@@ -29,7 +28,6 @@ async function bootstrap() {
     app.use(helmet());
   }
 
-  // set api version
   app.enableVersioning({
     type: VersioningType.URI,
   });
@@ -38,10 +36,8 @@ async function bootstrap() {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
 
-  // Swagger Api
   setupSwagger(app, configService);
 
-  // Start the server
   await app.listen(port);
   Logger.log(`(  ) Application is running on: ${await app.getUrl()}`);
 }
