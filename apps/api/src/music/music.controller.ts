@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Put,
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { MusicService } from './music.service';
@@ -50,7 +51,7 @@ export class MusicController {
     };
   }
 
-  @Post(':id/upload')
+  @Patch(':id/file/upload')
   @ApiOperation({ description: 'Upload audio file for a specific music' })
   @UseInterceptors(
     FileInterceptor('musicAudioFileName', {
@@ -92,7 +93,7 @@ export class MusicController {
     };
   }
 
-  @Post(':id/cover/upload')
+  @Patch(':id/cover/upload')
   @ApiOperation({
     description: 'Upload music cover image file for a specific music',
   })
@@ -159,7 +160,7 @@ export class MusicController {
     return { message: 'Operation was successful', data: result };
   }
 
-  @Patch(':id')
+  @Put(':id')
   public async update(@Param('id') id: string, @Body() data: UpdateMusicDto) {
     const result = await this.musicService.update(id, data);
     this.logger.debug(`Request parameters: ${id}`);

@@ -63,7 +63,7 @@ describe('Music Module', () => {
         .send({ name: 'Music', releaseDate: new Date(Date.now()) });
       const musicId = resForCreation.body.data.id;
       await request(app.getHttpServer())
-        .post(`/musics/${musicId}/upload`)
+        .patch(`/musics/${musicId}/file/upload`)
         .attach(
           'musicAudioFileName',
           'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
@@ -83,7 +83,7 @@ describe('Music Module', () => {
       const musicId = resForCreation.body.data.id;
 
       const res = await request(app.getHttpServer())
-        .post(`/musics/${musicId}/upload`)
+        .patch(`/musics/${musicId}/file/upload`)
         .attach(
           'musicAudioFileName',
           'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
@@ -103,7 +103,7 @@ describe('Music Module', () => {
         .send({ name: 'Music', releaseDate: new Date(Date.now()) });
       const musicId = resForCreation.body.data.id;
       await request(app.getHttpServer())
-        .post(`/musics/${musicId}/cover/upload`)
+        .patch(`/musics/${musicId}/cover/upload`)
         .attach(
           'coverImageFileName',
           'assets/mock-data/musics-cover/android-chrome-512x512.png'
@@ -123,7 +123,7 @@ describe('Music Module', () => {
         .send({ name: 'Music', releaseDate: new Date(Date.now()) });
       const musicId = resForCreation.body.data.id;
       const res = await request(app.getHttpServer())
-        .post(`/musics/${musicId}/cover/upload`)
+        .patch(`/musics/${musicId}/cover/upload`)
         .attach(
           'coverImageFileName',
           'assets/mock-data/musics-cover/android-chrome-512x512.png'
@@ -180,7 +180,7 @@ describe('Music Module', () => {
       const musicId = result._id;
 
       const res = await request(app.getHttpServer())
-        .patch(`/musics/${musicId}`)
+        .put(`/musics/${musicId}`)
         .send({
           name: mockDataMusic1.name + ' (update)',
         });
@@ -198,14 +198,14 @@ describe('Music Module', () => {
       });
       const musicId = result._id;
       await request(app.getHttpServer())
-        .post(`/musics/${musicId}/upload`)
+        .patch(`/musics/${musicId}/file/upload`)
         .attach(
           'musicAudioFileName',
           'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
         );
 
       await request(app.getHttpServer())
-        .post(`/musics/${musicId}/cover/upload`)
+        .patch(`/musics/${musicId}/cover/upload`)
         .attach(
           'coverImageFileName',
           'assets/mock-data/musics-cover/android-chrome-512x512.png'
