@@ -1,6 +1,7 @@
 import {
   Injectable,
   ServiceUnavailableException,
+  Logger,
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -22,6 +23,8 @@ export class MusicService {
     private readonly musicModel: Model<Music>,
     private readonly configService: ConfigService
   ) { }
+
+  logger = new Logger(MusicService.name);
 
   async create(data: CreateMusicWithFilenameDto): Promise<Music> {
     const newMusic = new this.musicModel(data);
@@ -74,25 +77,21 @@ export class MusicService {
   }
 
   private purgeAssociatedFiles(music: Music) {
-    const audioFilePath =
-      this.configService.get(ENV_NAME.STORAGE_DEST) +
-      '/musics/' +
-      music.musicAudioFileName;
-    const coverFilePath =
-      this.configService.get(ENV_NAME.STORAGE_DEST) +
-      '/covers/' +
-      music.coverImageFileName;
+    const audioFilePath = `${this.configService.get(
+      ENV_NAME.STORAGE_DEST
+    )}/musics/${music.musicAudioFileName}`;
+
+    const coverFilePath = `${this.configService.get(
+      ENV_NAME.STORAGE_DEST
+    )}/covers/${music.coverImageFileName}`;
+
     unlink(audioFilePath, (err) => {
-      if (err) {
-        throw err;
-      }
-      console.log('File is deleted.');
+      if (err) throw err;
+      this.logger.verbose(`${audioFilePath} File is deleted.`);
     });
     unlink(coverFilePath, (err) => {
-      if (err) {
-        throw err;
-      }
-      console.log('File is deleted.');
+      if (err) throw err;
+      this.logger.verbose(`${coverFilePath} File is deleted.`);
     });
   }
 
