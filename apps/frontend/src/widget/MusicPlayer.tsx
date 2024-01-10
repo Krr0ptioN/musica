@@ -69,7 +69,9 @@ export const MusicPlayer = () => {
   /*  TODO: Add cover to backend */
   return (
     <div className="flex flex-col justify-between items-center rounded-xl sm:w-2/4 shadow-glass h-[30rem] bg-primary md:w-[390px]">
-      <MusicCover src={undefined} />
+      <MusicCover
+        src={playingMusic ? playingMusic.coverImageFileName : undefined}
+      />
       {playingMusic ? (
         <MusicInfo name={playingMusic.name} artists={playingMusic.artists} />
       ) : (
@@ -77,7 +79,7 @@ export const MusicPlayer = () => {
       )}
 
       <audio
-        src={playingMusic ? playingMusic.file : undefined}
+        src={playingMusic ? playingMusic.musicAudioFileName : undefined}
         ref={musicAudioRef}
       ></audio>
 
