@@ -39,7 +39,7 @@ describe('Music Module', () => {
     await app.init();
   }, 90000);
 
-  const createdMusic = {
+  const mockDataMusic1 = {
     name: 'Music #1',
     releaseDate: new Date(),
   };
@@ -140,17 +140,16 @@ describe('Music Module', () => {
       await musicService.create({
         name: 'Music #1',
         releaseDate: new Date(Date.now()),
+        coverImageFileName: 'fa123asd.png',
+        musicAudioFileName: 'fa123asd.mp3',
       });
       await musicService.create({
         name: 'Music #2',
         releaseDate: new Date(Date.now()),
-      });
-      await musicService.create({
-        name: 'Music #3',
-        releaseDate: new Date(Date.now()),
+        coverImageFileName: 'asdfasd.png',
+        musicAudioFileName: 'asdfasd.mp3',
       });
       const res = await request(app.getHttpServer()).get('/music');
-      console.log(res.body.data);
       expect(res.status).toBe(200);
       expect(res.body.data).toBeDefined();
     });
@@ -160,14 +159,14 @@ describe('Music Module', () => {
     it('should retrieve a music by ID (findOne)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
 
       const res = await request(app.getHttpServer()).get(`/music/${musicId}`);
 
-      expect(res.body.data.name).toBe(createdMusic.name);
+      expect(res.body.data.name).toBe(mockDataMusic1.name);
     });
   });
 
@@ -175,15 +174,15 @@ describe('Music Module', () => {
     it('should update a music by ID (update)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
 
       const res = await request(app.getHttpServer())
         .patch(`/music/${musicId}`)
         .send({
-          name: createdMusic.name + ' (update)',
+          name: mockDataMusic1.name + ' (update)',
         });
 
       expect(res.status).toBe(200);
@@ -194,8 +193,8 @@ describe('Music Module', () => {
     it('should remove a music by ID (remove)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
       await request(app.getHttpServer())
