@@ -129,12 +129,12 @@ export class MusicController {
     };
   }
 
-  @Get('file/:id')
+  @Get(':id/file')
   public async getMusicFile(@Param('id') id: string) {
     return this.musicService.getMusicAudioFile(id);
   }
 
-  @Get('cover/:id')
+  @Get(':id/cover')
   public async getMusicCoverFile(@Param('id') id: string) {
     return this.musicService.getMusicCoverImageFile(id);
   }

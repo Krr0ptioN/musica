@@ -1,4 +1,4 @@
-import { Music } from '@musica/types';
+import { IMusic } from '@musica/types';
 import { ActionTypes } from '../constants/action-type';
 import { Dispatch } from 'react';
 import { MusicAction } from '../actions';
@@ -13,24 +13,43 @@ export const getAllMusics = () => {
       });
       const { data } = await musicaAxios.get('music');
       const promises = data.data.map(async (obj: any) => {
-        const response = await musicaAxios.get(`/music/file/${obj.id}`, {
+        const responseAudio = await musicaAxios.get(`/music/${obj.id}/file`, {
           responseType: 'blob',
         });
-        console.log('Response');
-        const blobData: Blob = response.data;
-
-        const fileBlob: File = new File([blobData], obj.fileName, {
-          type: 'audio/mpeg',
+        const responseCover = await musicaAxios.get(`/music/${obj.id}/cover`, {
+          responseType: 'blob',
         });
-        const fileURL = URL.createObjectURL(fileBlob);
-        const music: Music = {
+        const musicAudioBlobData: Blob = responseAudio.data;
+
+        const musicFileBlob: File = new File(
+          [musicAudioBlobData],
+          obj.fileName,
+          {
+            type: 'audio/mpeg',
+          }
+        );
+
+        const musicCoverBlobData: Blob = responseCover.data;
+
+        const musicCoverBlob: File = new File(
+          [musicCoverBlobData],
+          obj.fileName,
+          {
+            type: 'audio/mpeg',
+          }
+        );
+        const musicFileURL = URL.createObjectURL(musicFileBlob);
+        const musicCoverURL = URL.createObjectURL(musicCoverBlob);
+        const music: IMusic = {
           artists: obj.artistIds,
           album: obj.albumIds,
           name: obj.name,
           playlists: obj.playlistIds,
-          fileName: obj.fileName,
+          musicAudioFileName: obj.musicAudioFileName,
+          coverImageFileName: obj.coverImageFileName,
           id: obj.id,
-          file: fileURL,
+          musicFile: musicFileURL,
+          musicCover: musicCoverURL,
         };
 
         return music;
@@ -53,6 +72,8 @@ export const getAllMusics = () => {
     }
   };
 };
+
+// TODO: Add music action creator for creating and adding music to library
 
 export const clearAllMusic = () => {
   return async (dispatch: Dispatch<MusicAction>) => {

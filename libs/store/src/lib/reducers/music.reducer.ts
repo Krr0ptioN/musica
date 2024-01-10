@@ -1,10 +1,10 @@
-import { Music } from '@musica/types';
+import { IMusic } from '@musica/types';
 import { ActionTypes } from '../constants/action-type';
 
 export interface MusicsState {
   playing: boolean;
   selectedMusic: number;
-  musics: Music[];
+  musics: IMusic[];
 }
 
 export interface Action {
@@ -20,7 +20,7 @@ export const musicInitialState: MusicsState = {
 
 interface MusicPayload {
   id: number;
-  music?: Music;
+  music?: IMusic;
 }
 
 interface ReduceActionArgs {
