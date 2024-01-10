@@ -10,21 +10,24 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Put,
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { MusicService } from './music.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  multerDiskStorageDestination,
-  audioFileFilter,
-  multerDiskStorageFilename,
-} from '../utils/mutler';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
+import {
+  imageFileFilter,
+  multerDiskStorageMusicAudioFileDestination,
+  multerDiskStorageFilename,
+  multerDiskStorageMusicCoverFileImageDestination,
+  audioFileFilter,
+} from '@musica/core';
 
 @ApiTags('Music')
-@Controller('music')
+@Controller('musics')
 export class MusicController {
   constructor(private readonly musicService: MusicService) { }
 
@@ -32,44 +35,115 @@ export class MusicController {
 
   @Post()
   @ApiOperation({ description: 'Create music' })
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: multerDiskStorageDestination,
-        filename: multerDiskStorageFilename,
-      }),
-      fileFilter: audioFileFilter,
-    })
-  )
-  async create(
-    @Body() data: CreateMusicDto,
-    @UploadedFile()
-    file: Express.Multer.File
-  ) {
-    if (!file) {
-      throw new BadRequestException('No file uploaded');
-    }
-
+  async create(@Body() data: CreateMusicDto) {
     const result = await this.musicService.create({
       ...data,
-      fileName: file.filename,
     });
+
     this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
-    this.logger.verbose(`MUSIC CREATE | Music file uploaded: ${file.filename}`);
     return {
       message: 'Music was successfully created',
       success: true,
       data: {
         date: result.createdAt,
-        fileName: file.filename,
         id: result.id,
       },
     };
   }
 
-  @Get('file/:id')
-  public async getFile(@Param('id') id: string) {
-    return this.musicService.getMusicFile(id);
+  @Patch(':id/file/upload')
+  @ApiOperation({ description: 'Upload audio file for a specific music' })
+  @UseInterceptors(
+    FileInterceptor('musicAudioFileName', {
+      storage: diskStorage({
+        destination: multerDiskStorageMusicAudioFileDestination,
+        filename: multerDiskStorageFilename,
+      }),
+      fileFilter: audioFileFilter,
+      limits: {
+        fileSize: 8000000,
+      },
+    })
+  )
+  async uploadMusic(
+    @Param('id') id: string,
+    @UploadedFile()
+    musicAudioFileName: Express.Multer.File
+  ) {
+    if (!musicAudioFileName) {
+      this.logger.log(musicAudioFileName);
+      throw new BadRequestException('No file uploaded');
+    }
+
+    const result = await this.musicService.update(id, {
+      musicAudioFileName: musicAudioFileName.filename,
+    });
+
+    this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.verbose(
+      `MUSIC CREATE | Music file uploaded: ${musicAudioFileName.filename}`
+    );
+    return {
+      message: 'Music was successfully created',
+      success: true,
+      data: {
+        musicAudioFileName: musicAudioFileName.filename,
+        id: result.id,
+      },
+    };
+  }
+
+  @Patch(':id/cover/upload')
+  @ApiOperation({
+    description: 'Upload music cover image file for a specific music',
+  })
+  @UseInterceptors(
+    FileInterceptor('coverImageFileName', {
+      storage: diskStorage({
+        destination: multerDiskStorageMusicCoverFileImageDestination,
+        filename: multerDiskStorageFilename,
+      }),
+      fileFilter: imageFileFilter,
+      limits: {
+        fileSize: 4000000,
+      },
+    })
+  )
+  async uploadMusicCover(
+    @Param('id') id: string,
+    @UploadedFile()
+    coverImageFileName: Express.Multer.File
+  ) {
+    if (!coverImageFileName) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    const result = await this.musicService.update(id, {
+      coverImageFileName: coverImageFileName.filename,
+    });
+
+    this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.verbose(
+      `MUSIC CREATE | Music file uploaded: ${coverImageFileName.filename}`
+    );
+    return {
+      message: 'Music was successfully created',
+      success: true,
+      data: {
+        coverImageFileName: coverImageFileName.filename,
+        id: result.id,
+      },
+    };
+  }
+
+  @Get(':id/file')
+  public async getMusicFile(@Param('id') id: string) {
+    return this.musicService.getMusicAudioFile(id);
+  }
+
+  @Get(':id/cover')
+  public async getMusicCoverFile(@Param('id') id: string) {
+    return this.musicService.getMusicCoverImageFile(id);
   }
 
   @Get()
@@ -85,7 +159,8 @@ export class MusicController {
     this.logger.verbose(`Data Retrived from user query:\n${result}`);
     return { message: 'Operation was successful', data: result };
   }
-  @Patch(':id')
+
+  @Put(':id')
   public async update(@Param('id') id: string, @Body() data: UpdateMusicDto) {
     const result = await this.musicService.update(id, data);
     this.logger.debug(`Request parameters: ${id}`);

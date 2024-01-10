@@ -66,20 +66,16 @@ export const MusicPlayer = () => {
     setLoading(false);
   }, [musics, selectedMusic]);
 
-  /*  TODO: Add cover to backend */
   return (
     <div className="flex flex-col justify-between items-center rounded-xl sm:w-2/4 shadow-glass h-[30rem] bg-primary md:w-[390px]">
-      <MusicCover src={undefined} />
+      <MusicCover src={playingMusic?.coverImageFileName} />
       {playingMusic ? (
         <MusicInfo name={playingMusic.name} artists={playingMusic.artists} />
       ) : (
         <MusicInfo name="Kill me right now" artists={['System of the Dawn']} />
       )}
 
-      <audio
-        src={playingMusic ? playingMusic.file : undefined}
-        ref={musicAudioRef}
-      ></audio>
+      <audio src={playingMusic?.musicAudioFileName} ref={musicAudioRef}></audio>
 
       <MusicPlayerProgressBar
         duration="12:40"

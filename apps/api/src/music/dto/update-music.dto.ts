@@ -16,3 +16,8 @@ export class UpdateMusicDto {
   @ApiPropertyOptional()
   releaseDate?: Date;
 }
+
+export class UpdateMusicWithFilenameDto extends UpdateMusicDto {
+  musicAudioFileName?: string;
+  coverImageFileName?: string;
+}

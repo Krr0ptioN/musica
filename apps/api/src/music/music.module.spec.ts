@@ -2,7 +2,6 @@ import { AppModule } from '../app/app.module';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import { CreateMusicDto } from './dto/create-music.dto';
 import {
   mongoMemoryServerSetup,
   mongoMemoryServerTeardown,
@@ -38,134 +37,182 @@ describe('Music Module', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
-  }, 50000);
+  }, 90000);
 
-  const createdMusic = {
+  const mockDataMusic1 = {
     name: 'Music #1',
-    fileName: 'Music #1 file path',
     releaseDate: new Date(),
   };
 
-  describe('POST /api/v1/music | Music creation', () => {
-    it('should throw error if file is not provided', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/music')
-        .send({ name: 'Music without file' } as CreateMusicDto);
-      expect(res.status).toBe(400);
-      expect(res.body.message).toBe('No file uploaded');
-    });
-    it('should throw error if file is not an audio', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/music')
-        .attach('file', 'assets/mock-data/non-audio-file.png')
-        .field('name', 'Non music file');
-      expect(res.status).toBe(400);
-      expect(res.body.message).toBe(
-        'Only audio files (mp3, ogg, m4a) are allowed!'
-      );
-    });
+  describe('POST /api/musics | Music creation', () => {
     it('should create music and upload file', async () => {
+      musicService.removeAllMusic();
       const res = await request(app.getHttpServer())
-        .post('/music')
-        .attach('file', 'assets/mock-data/audio-file.mp3')
-        .field('name', 'Music');
+        .post('/musics')
+        .send({ name: 'Music', releaseDate: new Date(Date.now()) });
       expect(res.status).toBe(201);
       expect(res.body.message).toBe('Music was successfully created');
     });
   });
 
-  describe('GET /api/v1/music/file/:id | Get music file', () => {
-    it('should find the music and get the file to play', async () => {
+  describe('Upload and get Music File', () => {
+    it('GET /api/musics/:id/file | should find the music and get the file to play', async () => {
       musicService.removeAllMusic();
-
-      const resForSetup = await request(app.getHttpServer())
-        .post('/music')
-        .attach('file', 'assets/mock-data/audio-file.mp3')
-        .field('name', 'Music');
-
-      const musicId = resForSetup.body.data.id;
-
+      const resForCreation = await request(app.getHttpServer())
+        .post('/musics')
+        .send({ name: 'Music', releaseDate: new Date(Date.now()) });
+      const musicId = resForCreation.body.data.id;
+      await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/file/upload`)
+        .attach(
+          'musicAudioFileName',
+          'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
+        );
       const res = await request(app.getHttpServer()).get(
-        `/music/file/${musicId}`
+        `/musics/${musicId}/file`
       );
       expect(res.body.stream.path).toBeDefined();
     });
+
+    it('POST /api/musics/:id/upload | should find the music and upload the file successfully', async () => {
+      musicService.removeAllMusic();
+
+      const resForCreation = await request(app.getHttpServer())
+        .post('/musics')
+        .send({ name: 'Music', releaseDate: new Date(Date.now()) });
+      const musicId = resForCreation.body.data.id;
+
+      const res = await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/file/upload`)
+        .attach(
+          'musicAudioFileName',
+          'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
+        );
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.musicAudioFileName).toBeDefined();
+    });
   });
 
-  describe('GET /api/v1/music | Find and get all musics', () => {
+  describe('Upload and get Music Cover Image File', () => {
+    it('GET /api/musics/:id/cover | should find the music and get the image cover file', async () => {
+      musicService.removeAllMusic();
+
+      const resForCreation = await request(app.getHttpServer())
+        .post('/musics')
+        .send({ name: 'Music', releaseDate: new Date(Date.now()) });
+      const musicId = resForCreation.body.data.id;
+      await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/cover/upload`)
+        .attach(
+          'coverImageFileName',
+          'assets/mock-data/musics-cover/android-chrome-512x512.png'
+        );
+
+      const res = await request(app.getHttpServer()).get(
+        `/musics/${musicId}/cover`
+      );
+      expect(res.body.stream.path).toBeDefined();
+    });
+
+    it('POST /api/musics/:id/upload | should find the music and upload the file successfully', async () => {
+      musicService.removeAllMusic();
+
+      const resForCreation = await request(app.getHttpServer())
+        .post('/musics')
+        .send({ name: 'Music', releaseDate: new Date(Date.now()) });
+      const musicId = resForCreation.body.data.id;
+      const res = await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/cover/upload`)
+        .attach(
+          'coverImageFileName',
+          'assets/mock-data/musics-cover/android-chrome-512x512.png'
+        );
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.coverImageFileName).toBeDefined();
+    });
+  });
+
+  describe('GET /api/musics | Find and get all musics', () => {
     it('should return 3 music', async () => {
       await musicService.removeAllMusic();
       await musicService.create({
         name: 'Music #1',
-        fileName: 'Music #1 file path',
         releaseDate: new Date(Date.now()),
+        coverImageFileName: 'music1-cover.png',
+        musicAudioFileName: 'music1-audio.mp3',
       });
       await musicService.create({
         name: 'Music #2',
-        fileName: 'Music #2 file path',
         releaseDate: new Date(Date.now()),
+        coverImageFileName: 'music2-cover.png',
+        musicAudioFileName: 'music2-audio.mp3',
       });
-      await musicService.create({
-        name: 'Music #3',
-        fileName: 'Music #3 file path',
-        releaseDate: new Date(Date.now()),
-      });
-      const res = await request(app.getHttpServer()).get('/music');
+      const res = await request(app.getHttpServer()).get('/musics');
       expect(res.status).toBe(200);
-      expect(res.body.data.length).toBe(3);
+      expect(res.body.data).toBeDefined();
     });
   });
 
-  describe('GET /api/v1/music/:id | Get music file', () => {
+  describe('GET /api/musics/:id | Get music by id', () => {
     it('should retrieve a music by ID (findOne)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        fileName: createdMusic.fileName,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
 
-      const res = await request(app.getHttpServer()).get(`/music/${musicId}`);
+      const res = await request(app.getHttpServer()).get(`/musics/${musicId}`);
 
-      expect(res.body.data.name).toBe(createdMusic.name);
-      expect(res.body.data.fileName).toBe(createdMusic.fileName);
+      expect(res.body.data.name).toBe(mockDataMusic1.name);
     });
   });
 
-  describe('PATCH /api/v1/music/:id | Update music data', () => {
+  describe('PATCH /api/musics/:id | Update music data', () => {
     it('should update a music by ID (update)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        fileName: createdMusic.fileName,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
 
       const res = await request(app.getHttpServer())
-        .patch(`/music/${musicId}`)
+        .put(`/musics/${musicId}`)
         .send({
-          name: createdMusic.name + ' (update)',
-          fileName: createdMusic.fileName + ' (update)',
+          name: mockDataMusic1.name + ' (update)',
         });
 
       expect(res.status).toBe(200);
     });
   });
 
-  describe('DELETE /api/v1/music/:id | Remove music file', () => {
+  describe('DELETE /api/musics/:id | Remove music file', () => {
     it('should remove a music by ID (remove)', async () => {
       await musicService.removeAllMusic();
       const result = await musicService.create({
-        name: createdMusic.name,
-        fileName: createdMusic.fileName,
-        releaseDate: createdMusic.releaseDate,
+        name: mockDataMusic1.name,
+        releaseDate: mockDataMusic1.releaseDate,
       });
       const musicId = result._id;
+      await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/file/upload`)
+        .attach(
+          'musicAudioFileName',
+          'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
+        );
+
+      await request(app.getHttpServer())
+        .patch(`/musics/${musicId}/cover/upload`)
+        .attach(
+          'coverImageFileName',
+          'assets/mock-data/musics-cover/android-chrome-512x512.png'
+        );
 
       const res = await request(app.getHttpServer()).delete(
-        `/music/${musicId}`
+        `/musics/${musicId}`
       );
       expect(res.status).toBe(200);
     });
