@@ -140,14 +140,14 @@ describe('Music Module', () => {
       await musicService.create({
         name: 'Music #1',
         releaseDate: new Date(Date.now()),
-        coverImageFileName: 'fa123asd.png',
-        musicAudioFileName: 'fa123asd.mp3',
+        coverImageFileName: 'music1-cover.png',
+        musicAudioFileName: 'music1-audio.mp3',
       });
       await musicService.create({
         name: 'Music #2',
         releaseDate: new Date(Date.now()),
-        coverImageFileName: 'asdfasd.png',
-        musicAudioFileName: 'asdfasd.mp3',
+        coverImageFileName: 'music2-cover.png',
+        musicAudioFileName: 'music2-audio.mp3',
       });
       const res = await request(app.getHttpServer()).get('/music');
       expect(res.status).toBe(200);
