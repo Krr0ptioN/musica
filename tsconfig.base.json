@@ -16,6 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@musica/api": ["apps/api"],
+      "@musica/config": ["libs/config/src/index.ts"],
+      "@musica/core": ["libs/core/src/index.ts"],
       "@musica/data-access": ["packages/data-access/client"],
       "@musica/data-access/client": ["packages/data-access/client"],
       "@musica/database-models": ["libs/database-models/src/index.ts"],
