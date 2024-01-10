@@ -25,7 +25,10 @@ export class Music extends Document {
   updatedAt: Date;
 
   @Prop({ unique: true })
-  fileName: string;
+  musicAudioFileName: string;
+
+  @Prop({ unique: true })
+  musicCoverImgFileName: string;
 }
 
 export const MUSIC_SCHEMA_MODEL = 'music';
