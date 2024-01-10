@@ -14,6 +14,7 @@ import {
 } from './dto/create-music.dto';
 import { UpdateMusicWithFilenameDto } from './dto/update-music.dto';
 import { ENV_NAME } from '@musica/core';
+import fs from 'fs';
 
 @Injectable()
 export class MusicService {
@@ -73,13 +74,35 @@ export class MusicService {
     }
   }
 
+  private purgeAssociatedFiles(music: Music) {
+    const audioFilePath =
+      this.configService.get(ENV_NAME.STORAGE_DEST) +
+      '/musics/' +
+      music.musicAudioFileName;
+    const coverFilePath =
+      this.configService.get(ENV_NAME.STORAGE_DEST) +
+      '/covers/' +
+      music.coverImageFileName;
+    fs.unlink(audioFilePath, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log('File is deleted.');
+    });
+    fs.unlink(coverFilePath, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log('File is deleted.');
+    });
+  }
+
   async remove(id: string): Promise<boolean> {
     try {
       const music = await this.musicModel.findOneAndDelete({ _id: id });
-      // // TODO: Delete the associated file also
-      // if (music) {
-      // }
-
+      if (music) {
+        this.purgeAssociatedFiles(music);
+      }
       return music.name ? true : false;
     } catch (error) {
       throw new ServiceUnavailableException('Endpoint is not available');
