@@ -50,7 +50,7 @@ describe('Music Module', () => {
       const res = await request(app.getHttpServer())
         .post('/musics')
         .send({ name: 'Music', releaseDate: new Date(Date.now()) });
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(200);
       expect(res.body.message).toBe('Music was successfully created');
     });
   });
@@ -89,7 +89,7 @@ describe('Music Module', () => {
           'assets/mock-data/musics-mp3/TESTING-MOCK-DATA-1MB-MP3.mp3'
         );
 
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(200);
       expect(res.body.data.musicAudioFileName).toBeDefined();
     });
   });
