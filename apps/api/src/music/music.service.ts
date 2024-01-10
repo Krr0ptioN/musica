@@ -4,7 +4,6 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import config from '../configs/config';
 import { createReadStream } from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { MUSIC_SCHEMA_MODEL, Music } from '@musica/database-models';
@@ -13,7 +12,8 @@ import {
   CreateMusicDto,
   CreateMusicWithFilenameDto,
 } from './dto/create-music.dto';
-import { UpdateMusicDto } from './dto/update-music.dto';
+import { UpdateMusicWithFilenameDto } from './dto/update-music.dto';
+import { ENV_NAME } from '@musica/core';
 
 @Injectable()
 export class MusicService {
@@ -23,22 +23,28 @@ export class MusicService {
     private readonly configService: ConfigService
   ) { }
 
-
   async create(data: CreateMusicWithFilenameDto): Promise<Music> {
     const newMusic = new this.musicModel(data);
     const result = await newMusic.save();
     return result;
   }
 
-  async getMusicFile(id: string): Promise<StreamableFile> {
-    const uploadStorage: string =
-      this.configService.get<string>('MUSIC_STORAGE') ||
-      config.storage.musicStorageDest;
-
+  async getMusicAudioFile(id: string): Promise<StreamableFile> {
     const music = await this.musicModel.findById(id);
-    const filePath = uploadStorage + '/' + music.fileName;
-    const file = createReadStream(filePath);
-    return new StreamableFile(file);
+    const filePath =
+      this.configService.get(ENV_NAME.STORAGE_DEST) +
+      '/musics/' +
+      music.musicAudioFileName;
+    return new StreamableFile(createReadStream(filePath));
+  }
+
+  async getMusicCoverImageFile(id: string): Promise<StreamableFile> {
+    const music = await this.musicModel.findById(id);
+    const filePath =
+      this.configService.get(ENV_NAME.STORAGE_DEST) +
+      '/covers/' +
+      music.coverImageFileName;
+    return new StreamableFile(createReadStream(filePath));
   }
 
   async findOne(id: string): Promise<Music | null> {
@@ -58,7 +64,7 @@ export class MusicService {
     }));
   }
 
-  async update(id: string, data: UpdateMusicDto): Promise<Music> {
+  async update(id: string, data: UpdateMusicWithFilenameDto): Promise<Music> {
     try {
       const music = await this.musicModel.findOneAndUpdate({ _id: id }, data);
       return music;

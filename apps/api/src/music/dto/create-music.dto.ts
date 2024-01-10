@@ -20,5 +20,6 @@ export class CreateMusicDto {
 }
 
 export class CreateMusicWithFilenameDto extends CreateMusicDto {
-  fileName: string;
+  musicAudioFileName?: string;
+  coverImageFileName?: string;
 }
