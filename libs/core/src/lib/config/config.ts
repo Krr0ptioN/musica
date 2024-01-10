@@ -17,7 +17,5 @@ export const configuration = () => {
     passwordResetTokenExpiresIn:
       process.env[ENV_NAME.PASSWORD_RESET_TOKEN_EXPIRES_IN],
     storageDest: process.env[ENV_NAME.STORAGE_DEST],
-    musicAudioStorageDest: process.env[ENV_NAME.STORAGE_DEST] + '/musics',
-    coverImageStorageDest: process.env[ENV_NAME.STORAGE_DEST] + '/covers',
   };
 };
