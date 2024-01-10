@@ -59,6 +59,9 @@ export class MusicController {
         filename: multerDiskStorageFilename,
       }),
       fileFilter: audioFileFilter,
+      limits: {
+        fileSize: 8000000,
+      },
     })
   )
   async uploadMusic(
@@ -100,6 +103,9 @@ export class MusicController {
         filename: multerDiskStorageFilename,
       }),
       fileFilter: imageFileFilter,
+      limits: {
+        fileSize: 4000000,
+      },
     })
   )
   async uploadMusicCover(
