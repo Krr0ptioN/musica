@@ -23,7 +23,7 @@ export const getAllMusics = () => {
 
         const musicFileBlob: File = new File(
           [musicAudioBlobData],
-          obj.fileName,
+          obj.musicAudioFileName,
           {
             type: 'audio/mpeg',
           }
@@ -33,9 +33,9 @@ export const getAllMusics = () => {
 
         const musicCoverBlob: File = new File(
           [musicCoverBlobData],
-          obj.fileName,
+          obj.coverImageFileName,
           {
-            type: 'audio/mpeg',
+            type: 'image/mpeg',
           }
         );
         const musicFileURL = URL.createObjectURL(musicFileBlob);
