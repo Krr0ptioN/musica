@@ -26,7 +26,7 @@ import {
 } from '@musica/core';
 
 @ApiTags('Music')
-@Controller('music')
+@Controller('musics')
 export class MusicController {
   constructor(private readonly musicService: MusicService) { }
 

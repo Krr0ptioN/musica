@@ -13,10 +13,10 @@ export const getAllMusics = () => {
       });
       const { data } = await musicaAxios.get('music');
       const promises = data.data.map(async (obj: any) => {
-        const responseAudio = await musicaAxios.get(`/music/${obj.id}/file`, {
+        const responseAudio = await musicaAxios.get(`/musics/${obj.id}/file`, {
           responseType: 'blob',
         });
-        const responseCover = await musicaAxios.get(`/music/${obj.id}/cover`, {
+        const responseCover = await musicaAxios.get(`/musics/${obj.id}/cover`, {
           responseType: 'blob',
         });
         const musicAudioBlobData: Blob = responseAudio.data;
