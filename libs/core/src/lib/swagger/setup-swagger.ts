@@ -13,8 +13,6 @@ const setupSwagger = (app: INestApplication, configService: ConfigService) => {
     title &&
     desc
   ) {
-    app.use([path, path + '-json']);
-
     const options = new DocumentBuilder()
       .setTitle(title)
       .setDescription(desc)
