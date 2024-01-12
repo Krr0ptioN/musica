@@ -23,6 +23,7 @@
       "@musica/database-models": ["libs/database-models/src/index.ts"],
       "@musica/store": ["libs/store/src/index"],
       "@musica/types": ["libs/types/src/index"],
+      "@musica/ui-shared": ["libs/ui-shared/src/index.ts"],
       "@musica/utils": ["libs/utils/src/index"]
     }
   },
