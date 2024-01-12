@@ -1,6 +1,4 @@
-import React from 'react';
-import { MusicPlayer } from '../widget/MusicPlayer';
-import { useActions } from '../hooks/action';
+import { MusicPlayer, useActions } from '@musica/ui-shared';
 
 export const HomePage = () => {
   const { getAllMusics } = useActions();
