@@ -8,6 +8,10 @@ module.exports = {
       __dirname,
       '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
+    join(
+      __dirname,
+      '../../libs/ui-shared/{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
+    ),
     createGlobPatternsForDependencies(__dirname),
   ],
   darkMode: 'class',
