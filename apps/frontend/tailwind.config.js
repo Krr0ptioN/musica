@@ -8,7 +8,7 @@ module.exports = {
       __dirname,
       '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
-    ../...createGlobPatternsForDependencies(__dirname),
+    createGlobPatternsForDependencies(__dirname),
   ],
   darkMode: 'class',
 
@@ -39,5 +39,4 @@ module.exports = {
       },
     },
   },
-  plugins: [],
 };
