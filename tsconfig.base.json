@@ -10,22 +10,51 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@musica/api": ["apps/api"],
-      "@musica/config": ["libs/config/src/index.ts"],
-      "@musica/core": ["libs/core/src/index.ts"],
-      "@musica/data-access": ["packages/data-access/client"],
-      "@musica/data-access/client": ["packages/data-access/client"],
-      "@musica/database-models": ["libs/database-models/src/index.ts"],
-      "@musica/store": ["libs/store/src/index"],
-      "@musica/types": ["libs/types/src/index"],
-      "@musica/ui-shared": ["libs/ui-shared/src/index.ts"],
-      "@musica/utils": ["libs/utils/src/index"]
+      "@musica/api": [
+        "apps/api"
+      ],
+      "@musica/config": [
+        "libs/config/src/index.ts"
+      ],
+      "@musica/core": [
+        "libs/core/src/index.ts"
+      ],
+      "@musica/data-access": [
+        "packages/data-access/client"
+      ],
+      "@musica/data-access/client": [
+        "packages/data-access/client"
+      ],
+      "@musica/database-models": [
+        "libs/database-models/src/index.ts"
+      ],
+      "@musica/store": [
+        "libs/store/src/index"
+      ],
+      "@musica/types": [
+        "libs/types/src/index"
+      ],
+      "@musica/ui-shared": [
+        "libs/ui-shared/src/index.ts"
+      ],
+      "@musica/ui-shared/style": [
+        "libs/ui-shared/src/lib/styles/index.css"
+      ],
+      "@musica/utils": [
+        "libs/utils/src/index"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
