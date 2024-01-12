@@ -66,6 +66,12 @@ jobs:
           STORAGE_DEST: '/tmp/musica'
           PORT_API: 3000
 
+      - name: 'Unit Test Shared UI Lib'
+        run: npx nx test ui-shared
+
+      - name: 'Unit Test Frontend'
+        run: npx nx test frontend
+
       - name: 'E2E Test API'
         run: npx nx e2e api-e2e
         env:

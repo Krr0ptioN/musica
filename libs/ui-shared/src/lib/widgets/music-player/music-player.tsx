@@ -1,17 +1,19 @@
-import {
-  MusicPlayerControls,
-  MusicPlayerProgressBar,
-  MusicPlayerCover,
-  MusicPlayerTitle,
-} from '@musica/ui-shared';
+/* eslint-disable-next-line */
+
+import { MusicPlayerControls } from '../../components/music-player-controls/music-player-controls';
+import { MusicPlayerProgressBar } from '../../components/music-player-progress-bar/music-player-progress-bar';
+import { MusicPlayerCover } from '../../components/music-player-cover/music-player-cover';
+import { MusicPlayerTitle } from '../../components/music-player-title/music-player-title';
 import { useEffect, useRef, useState } from 'react';
-import { useActions } from '../hooks/action';
-import { useTypedSelector } from '../hooks/typed-selector';
+import { useActions } from '../../hooks/action';
+import { useTypedSelector } from '../../hooks/typed-selector';
 
 export const MAX_MUSIC_SEEK = 100;
 export const MIN_MUSIC_SEEK = 0;
 
-export const MusicPlayer = () => {
+export interface MusicPlayerProps { }
+
+export function MusicPlayer(props: MusicPlayerProps) {
   const musicAudioRef = useRef<HTMLAudioElement>(null);
   const { musics, selectedMusic, playing } = useTypedSelector(
     (state) => state.musics
@@ -102,4 +104,6 @@ export const MusicPlayer = () => {
       />
     </div>
   );
-};
+}
+
+export default MusicPlayer;
