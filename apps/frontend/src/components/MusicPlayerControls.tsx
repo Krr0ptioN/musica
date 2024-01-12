@@ -1,5 +1,4 @@
-import react, { useEffect } from 'react';
-import { Btn } from './Btn';
+import { MusicPlayerBtn } from '@musica/ui-shared';
 
 interface MusicPlayerControlProps {
   musicPlaying: boolean | (() => void);
@@ -16,30 +15,30 @@ export const MusicPlayerControls: React.FC<MusicPlayerControlProps> = ({
 }) => {
   return (
     <div className="flex relative flex-row justify-center items-center -top-[20px]">
-      <Btn
+      <MusicPlayerBtn
         className="text-4xl fas fa-backward"
         title="previous"
         handlerOnClick={musicPlayingPrev}
-      ></Btn>
+      ></MusicPlayerBtn>
 
       {musicPlaying ? (
-        <Btn
+        <MusicPlayerBtn
           className="text-6xl fas fa-pause"
           handlerOnClick={musicPlayingToggle}
           title="pause"
-        ></Btn>
+        ></MusicPlayerBtn>
       ) : (
-        <Btn
+        <MusicPlayerBtn
           className="text-6xl fas fa-play"
           handlerOnClick={musicPlayingToggle}
           title="play"
-        ></Btn>
+        ></MusicPlayerBtn>
       )}
-      <Btn
+      <MusicPlayerBtn
         className="text-4xl fas fa-forward"
         handlerOnClick={musicPlayingNext}
         title="next"
-      ></Btn>
+      ></MusicPlayerBtn>
     </div>
   );
 };

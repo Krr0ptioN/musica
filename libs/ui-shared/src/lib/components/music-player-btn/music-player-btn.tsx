@@ -1,11 +1,17 @@
 /* eslint-disable-next-line */
-export interface MusicPlayerBtnProps { }
+export interface MusicPlayerBtnProps {
+  title: string;
+  className?: string;
+  handlerOnClick: () => void;
+}
 
 export function MusicPlayerBtn(props: MusicPlayerBtnProps) {
   return (
-    <div>
-      <h1>Welcome to Btn!</h1>
-    </div>
+    <i
+      className={`${props.className} p-3 hover:text-gray-700`}
+      title={props.title}
+      onClick={props.handlerOnClick}
+    ></i>
   );
 }
 

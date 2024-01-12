@@ -1,10 +1,12 @@
 import { render } from '@testing-library/react';
 
-import Btn from './btn';
+import MusicPlayerBtn from './music-player-btn';
 
 describe('Btn', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Btn />);
+    const { baseElement } = render(
+      <MusicPlayerBtn title="" handlerOnClick={() => ''} />
+    );
     expect(baseElement).toBeTruthy();
   });
 });
