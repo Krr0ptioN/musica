@@ -1,8 +1,7 @@
-import { MusicPlayerControls } from '@musica/ui-shared';
+import { MusicPlayerControls, MusicPlayerCover } from '@musica/ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import { useActions } from '../hooks/action';
 import { useTypedSelector } from '../hooks/typed-selector';
-import { MusicCover } from '../components/MusicCover';
 import { MusicPlayerProgressBar } from '../components/MusicPlayerProgressBar';
 import { MusicTitle as MusicInfo } from '../components/MusicTitle';
 
@@ -68,7 +67,7 @@ export const MusicPlayer = () => {
 
   return (
     <div className="flex flex-col justify-between items-center rounded-xl sm:w-2/4 shadow-glass h-[30rem] bg-primary md:w-[390px]">
-      <MusicCover src={playingMusic?.coverImageFileName} />
+      <MusicPlayerCover src={playingMusic?.coverImageFileName} />
       {playingMusic ? (
         <MusicInfo name={playingMusic.name} artists={playingMusic.artists} />
       ) : (
