@@ -2,11 +2,11 @@ import {
   MusicPlayerControls,
   MusicPlayerProgressBar,
   MusicPlayerCover,
+  MusicPlayerTitle,
 } from '@musica/ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import { useActions } from '../hooks/action';
 import { useTypedSelector } from '../hooks/typed-selector';
-import { MusicTitle as MusicInfo } from '../components/MusicTitle';
 
 export const MAX_MUSIC_SEEK = 100;
 export const MIN_MUSIC_SEEK = 0;
@@ -72,9 +72,19 @@ export const MusicPlayer = () => {
     <div className="flex flex-col justify-between items-center rounded-xl sm:w-2/4 shadow-glass h-[30rem] bg-primary md:w-[390px]">
       <MusicPlayerCover src={playingMusic?.coverImageFileName} />
       {playingMusic ? (
-        <MusicInfo name={playingMusic.name} artists={playingMusic.artists} />
+        <MusicPlayerTitle
+          name={playingMusic.name}
+          artists={playingMusic.artists}
+        />
       ) : (
-        <MusicInfo name="Kill me right now" artists={['System of the Dawn']} />
+        // TODO: [FEAT] Show a default music logo and loading
+        // or waiting while no music is selected to be played #33
+        // TEST: The scenario where user selected no music so
+        // it should face a loading state.
+        <MusicPlayerTitle
+          name="Kill me right now"
+          artists={['System of the Dawn']}
+        />
       )}
 
       <audio src={playingMusic?.musicAudioFileName} ref={musicAudioRef}></audio>
