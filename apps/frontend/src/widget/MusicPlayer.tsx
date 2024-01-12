@@ -1,4 +1,4 @@
-import { MusicPlayerControls } from '../components/MusicPlayerControls';
+import { MusicPlayerControls } from '@musica/ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import { useActions } from '../hooks/action';
 import { useTypedSelector } from '../hooks/typed-selector';
