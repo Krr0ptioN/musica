@@ -1,8 +1,11 @@
-import { MusicPlayerControls, MusicPlayerCover } from '@musica/ui-shared';
+import {
+  MusicPlayerControls,
+  MusicPlayerProgressBar,
+  MusicPlayerCover,
+} from '@musica/ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import { useActions } from '../hooks/action';
 import { useTypedSelector } from '../hooks/typed-selector';
-import { MusicPlayerProgressBar } from '../components/MusicPlayerProgressBar';
 import { MusicTitle as MusicInfo } from '../components/MusicTitle';
 
 export const MAX_MUSIC_SEEK = 100;
