@@ -1,14 +1,15 @@
-import React from 'react';
+/* eslint-disable-next-line */
 
-interface MusicCoverProps {
+import { useState } from 'react';
+
+export interface MusicPlayerProgressBarProps {
   handlerMusicSeek: (e: React.ChangeEvent<HTMLInputElement>) => void;
   duration: string;
 }
 
-export const MusicPlayerProgressBar = ({
-  handlerMusicSeek,
-  duration,
-}: MusicCoverProps) => {
+export function MusicPlayerProgressBar(props: MusicPlayerProgressBarProps) {
+  const [progress, setProgress] = useState();
+
   return (
     <div className="flex relative flex-col p-5 w-full font-mono">
       <input
@@ -16,13 +17,15 @@ export const MusicPlayerProgressBar = ({
         min="1"
         max="100"
         defaultValue="40"
-        onChange={handlerMusicSeek}
+        onChange={props.handlerMusicSeek}
         className="slider"
       ></input>
       <div className="flex flex-row justify-between">
-        <span>0:00</span>
-        <span>{duration}</span>
+        <span>{progress}</span>
+        <span>{props.duration}</span>
       </div>
     </div>
   );
-};
+}
+
+export default MusicPlayerProgressBar;
