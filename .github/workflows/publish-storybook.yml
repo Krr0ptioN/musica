@@ -23,8 +23,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Build Storybook
+        run: nx build-storybook ui-shared
+
       - name: Publish to Chromatic
-        run: chromaui/action@latest
+        run: pnpm run chromatic
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: libs/ui-shared
