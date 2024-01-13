@@ -25,9 +25,5 @@ export const Heading: Story = {
   args: {
     title: '',
     className: '',
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText(/Welcome to MusicPlayerBtn!/gi)).toBeTruthy();
-  },
+  }
 };

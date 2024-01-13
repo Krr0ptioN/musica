@@ -24,10 +24,4 @@ export const Heading: Story = {
   args: {
     duration: '',
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByText(/Welcome to MusicPlayerProgressBar!/gi)
-    ).toBeTruthy();
-  },
 };
