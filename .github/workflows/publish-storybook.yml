@@ -17,6 +17,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 'Use PNPM'
+        run: npm install -g pnpm
+
       - name: Install dependencies
         run: pnpm install
 
