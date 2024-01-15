@@ -200,22 +200,26 @@ export class MusicController {
   }
 
   @Get(':id/file')
+  @ApiOperation({ description: 'Create music' })
   public async getMusicFile(@Param('id') id: string) {
     return this.musicService.getMusicAudioFile(id);
   }
 
   @Get(':id/cover')
+  @ApiOperation({ description: 'Get the music cover image' })
   public async getMusicCoverFile(@Param('id') id: string) {
     return this.musicService.getMusicCoverImageFile(id);
   }
 
   @Get()
+  @ApiOperation({ description: 'Get all musics' })
   public async findAll() {
     const result = await this.musicService.findAll();
     return { message: 'Operation was successful', data: result };
   }
 
   @Get(':id')
+  @ApiOperation({ description: 'Get a specific music' })
   public async findOne(@Param('id') id: string) {
     const result = await this.musicService.findOne(id);
     this.logger.debug(`Request parameters: ${id}`);
@@ -224,6 +228,7 @@ export class MusicController {
   }
 
   @Put(':id')
+  @ApiOperation({ description: 'Update music detail specific music' })
   public async update(@Param('id') id: string, @Body() data: UpdateMusicDto) {
     const result = await this.musicService.update(id, data);
     this.logger.debug(`Request parameters: ${id}`);
@@ -232,6 +237,7 @@ export class MusicController {
   }
 
   @Delete(':id')
+  @ApiOperation({ description: "Remove a music with it's file" })
   public async remove(@Param('id') id: string) {
     const result = await this.musicService.remove(id);
     this.logger.debug(`Request parameters: ${id}`);
