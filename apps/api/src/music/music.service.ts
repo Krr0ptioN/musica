@@ -3,7 +3,6 @@ import {
   ServiceUnavailableException,
   Logger,
   StreamableFile,
-  HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
