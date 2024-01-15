@@ -3,6 +3,8 @@ import {
   ServiceUnavailableException,
   Logger,
   StreamableFile,
+  HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createReadStream, unlink } from 'fs';
@@ -53,8 +55,11 @@ export class MusicService {
     return new StreamableFile(createReadStream(filePath));
   }
 
-  async findOne(id: string): Promise<Music | null> {
+  async findOne(id: string): Promise<Music> {
     const result = await this.musicModel.findById(id);
+    if (!result) {
+      throw new NotFoundException('Music not found');
+    }
     return result;
   }
 
