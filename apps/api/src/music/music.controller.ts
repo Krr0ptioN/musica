@@ -215,34 +215,41 @@ export class MusicController {
   @ApiOperation({ description: 'Get all musics' })
   public async findAll() {
     const result = await this.musicService.findAll();
-    return { message: 'Operation was successful', data: result };
+    this.logger.verbose(
+      `MUSIC FINDALL | Number of musics retrived from user query: ${result.length}`
+    );
+    return { success: true, message: 'Operation was successful', data: result };
   }
 
   @Get(':id')
   @ApiOperation({ description: 'Get a specific music' })
   public async findOne(@Param('id') id: string) {
     const result = await this.musicService.findOne(id);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Data Retrived from user query:\n${result}`);
-    return { message: 'Operation was successful', data: result };
+    this.logger.debug(`MUSIC FINDONE | Request parameters: ${id}`);
+    this.logger.verbose(
+      `MUSIC FINDONE | Data Retrived from user query:\n${result}`
+    );
+    return { success: true, message: 'Operation was successful', data: result };
   }
 
   @Put(':id')
   @ApiOperation({ description: 'Update music detail specific music' })
   public async update(@Param('id') id: string, @Body() data: UpdateMusicDto) {
     const result = await this.musicService.update(id, data);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Music info updated to:\n${result}`);
-    return { message: 'Music successfully updated' };
+    this.logger.debug(`MUSIC UPDATE | Request parameters: ${id}`);
+    this.logger.verbose(`MUSIC UPDATE | Music info updated to:\n${result}`);
+    return { success: true, message: 'Music successfully updated' };
   }
 
   @Delete(':id')
   @ApiOperation({ description: "Remove a music with it's file" })
   public async remove(@Param('id') id: string) {
     const result = await this.musicService.remove(id);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Music successfully deleted:\n${result}`);
+    this.logger.debug(`MUSIC REMOVE | Request parameters: ${id}`);
+    this.logger.verbose(
+      `MUSIC REMOVE | Music successfully deleted:\n${result}`
+    );
     if (!result) throw new BadRequestException(`Failed to delete object`);
-    return { message: 'Music successfully deleted' };
+    return { success: true, message: 'Music successfully deleted' };
   }
 }
