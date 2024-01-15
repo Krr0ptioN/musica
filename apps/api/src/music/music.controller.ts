@@ -25,22 +25,43 @@ import {
   multerDiskStorageMusicCoverFileImageDestination,
   audioFileFilter,
 } from '@musica/core';
+import { Album, Playlist } from '@musica/database-models';
+import { AlbumsService } from '../albums/albums.service';
+import { ArtistsService } from '../artists/artists.service';
+import { PlaylistsService } from '../playlists/playlists.service';
 
 @ApiTags('Music')
 @Controller('musics')
 export class MusicController {
-  constructor(private readonly musicService: MusicService) { }
+  constructor(
+    private readonly musicService: MusicService,
+    private readonly albumsService: AlbumsService,
+    private readonly artistsService: ArtistsService,
+    private readonly playlistsService: PlaylistsService
+  ) { }
 
   private readonly logger = new Logger(MusicController.name);
 
   @Post()
   @ApiOperation({ description: 'Create music' })
   async create(@Body() data: CreateMusicDto) {
+    if (data.artists && !data.artistIds) {
+      data.artistIds = await this.createArtists(data.artists);
+    }
+
+    if (data.album && !data.albumId) {
+      data.albumId = await this.createAlbum(data.album, data.artistIds);
+    }
+
+    if (data.playlists && !data.playlistIds) {
+      data.playlistIds = await this.createPlaylists(data.playlists);
+    }
+
     const result = await this.musicService.create({
       ...data,
     });
 
-    this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.debug(`MUSIC CREATE | Received data client:\n${result}`);
     return {
       message: 'Music was successfully created',
       success: true,
@@ -49,6 +70,48 @@ export class MusicController {
         id: result.id,
       },
     };
+  }
+
+  private async createArtists(artistNames: string[]): Promise<string[]> {
+    const artistIds: string[] = [];
+
+    for (const artistName of artistNames) {
+      const artistObject = await this.artistsService.create({
+        name: artistName,
+      });
+
+      // Assuming the 'id' is a property in the 'Document' type
+      const artistId: string = (artistObject as any).id;
+
+      artistIds.push(artistId);
+    }
+
+    return artistIds;
+  }
+
+  private async createAlbum(
+    albumName: string,
+    artistIds: string[]
+  ): Promise<string> {
+    const musicAlbum: Album = await this.albumsService.create({
+      title: albumName,
+      artistIds,
+    });
+
+    return musicAlbum.id;
+  }
+
+  private async createPlaylists(playlistNames: string[]): Promise<string[]> {
+    const playlistIds: string[] = [];
+
+    for (const playlistName of playlistNames) {
+      const playlistObject: Playlist = await this.playlistsService.create({
+        name: playlistName,
+      });
+      playlistIds.push(playlistObject.id);
+    }
+
+    return playlistIds;
   }
 
   @Patch(':id/file/upload')
