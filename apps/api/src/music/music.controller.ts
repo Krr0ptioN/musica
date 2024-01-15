@@ -25,7 +25,7 @@ import {
   multerDiskStorageMusicCoverFileImageDestination,
   audioFileFilter,
 } from '@musica/core';
-import { Album, Playlist } from '@musica/database-models';
+import { Album, Artist, Playlist } from '@musica/database-models';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
 import { PlaylistsService } from '../playlists/playlists.service';
@@ -80,8 +80,7 @@ export class MusicController {
         name: artistName,
       });
 
-      // Assuming the 'id' is a property in the 'Document' type
-      const artistId: string = (artistObject as any).id;
+      const artistId: string = (artistObject as Artist).id;
 
       artistIds.push(artistId);
     }
