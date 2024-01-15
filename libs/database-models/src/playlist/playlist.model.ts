@@ -16,4 +16,5 @@ export class Playlist extends Document {
   updatedAt: Date;
 }
 
+export const PLAYLIST_SCHEMA_MODEL = 'playlist';
 export const PlaylistSchema = SchemaFactory.createForClass(Playlist);

@@ -5,6 +5,7 @@ import { MusicModule } from '../music/music.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CoreModule } from '@musica/core';
+import { PlaylistsModule } from '../playlists/playlists.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CoreModule } from '@musica/core';
       inject: [ConfigService],
     }),
     MusicModule,
+    PlaylistsModule,
     CoreModule,
   ],
   controllers: [AppController],
