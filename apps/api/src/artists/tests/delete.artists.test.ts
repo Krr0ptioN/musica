@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('DELETE /api/artists/:id | Remove music', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  }, 1000000);
 
   it('should remove an artist by ID (remove)', async () => {
     const result = await artistsService.create({

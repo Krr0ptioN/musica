@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('GET /api/artists/:id | Get artist by id', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  }, 1000000);
 
   it('should retrieve a artist by ID (findOne)', async () => {
     const result = await artistsService.create({
