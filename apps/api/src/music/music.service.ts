@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createReadStream, unlink, unlinkSync } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { MUSIC_SCHEMA_MODEL, Music } from '@musica/database-models';
 import { Model } from 'mongoose';
@@ -96,7 +96,9 @@ export class MusicService {
       if (error.code === 'ENOENT') {
         this.logger.verbose(`${filePath} File not found.`);
       } else {
-        this.logger.error(`MUSIC REMOVE | Error deleting ${filePath}: ${error.message}`);
+        this.logger.error(
+          `MUSIC REMOVE | Error deleting ${filePath}: ${error.message}`
+        );
       }
     }
   }
