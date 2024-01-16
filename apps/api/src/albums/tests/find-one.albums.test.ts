@@ -1,7 +1,9 @@
 import {
+  albumsService,
   app,
-  mockDataMusic,
-  musicService,
+  artistsService,
+  mockDataAlbum,
+  mockDataArtist,
   setupTestEnvironment,
   tearDownTestEnvironment,
 } from '../../utils/setup-test';
@@ -13,15 +15,18 @@ describe('GET /api/albums/:id | Get music by id', () => {
   }, 100000);
 
   it('should retrieve a music by ID (findOne)', async () => {
-    const result = await musicService.create({
-      name: mockDataMusic.name,
-      releaseDate: mockDataMusic.releaseDate,
+    const artist = await artistsService.create({
+      name: mockDataArtist.name,
+    });
+    const result = await albumsService.create({
+      title: mockDataAlbum.title,
+      artistIds: [artist.id],
     });
 
-    const musicId = result._id;
-    const res = await request(app.getHttpServer()).get(`/musics/${musicId}`);
+    const albumId = result._id;
+    const res = await request(app.getHttpServer()).get(`/albums/${albumId}`);
 
-    expect(res.body.data.name).toBe(mockDataMusic.name);
+    expect(res.body.data.title).toBe(mockDataAlbum.title);
   });
 
   afterAll(async () => {
