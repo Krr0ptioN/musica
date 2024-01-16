@@ -7,7 +7,7 @@ import {
 } from '../../utils/setup-test';
 import request from 'supertest';
 
-describe('PATH /api/musics/:id/cover/{upload} | Upload and get Music File', () => {
+describe('PATH /api/musics/:id/cover/{upload} | Upload and get Music Cover File', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
   }, 100000);
@@ -22,12 +22,15 @@ describe('PATH /api/musics/:id/cover/{upload} | Upload and get Music File', () =
       releaseDate: mockDataMusic.releaseDate,
     });
     const musicId = result._id;
-    await request(app.getHttpServer())
+    const uploadRes = await request(app.getHttpServer())
       .patch(`/musics/${musicId}/cover/upload`)
       .attach(
         'coverImageFileName',
         'assets/mock-data/musics-cover/android-chrome-512x512.png'
       );
+
+    expect(uploadRes.status).toBe(200);
+    expect(uploadRes.body.data.coverImageFileName).toBeDefined();
 
     const res = await request(app.getHttpServer()).get(
       `/musics/${musicId}/cover`
