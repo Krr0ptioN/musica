@@ -246,7 +246,7 @@ export class MusicController {
     const result = await this.musicService.remove(id);
     this.logger.debug(`MUSIC REMOVE | Request parameters: ${id}`);
     this.logger.verbose(
-      `MUSIC REMOVE | Music successfully deleted:\n${result}`
+      `MUSIC REMOVE | Music successfully deleted: ${result}`
     );
     if (!result) throw new BadRequestException(`Failed to delete object`);
     return { success: true, message: 'Music successfully deleted' };
