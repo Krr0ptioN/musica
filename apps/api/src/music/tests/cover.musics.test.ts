@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('PATH /api/musics/:id/cover/{upload} | Upload and get Music Cover File', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   beforeEach(async () => {
     await musicService.removeAllMusic();

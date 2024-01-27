@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('GET /api/playlists/:id | Get playlist by id', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   it('should retrieve a playlist by ID (findOne)', async () => {
     const result = await playlistsService.create({ ...mockDataPlaylist });

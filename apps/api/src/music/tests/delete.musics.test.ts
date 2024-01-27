@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('DELETE /api/musics/:id | Remove music', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 1000000);
+  });
 
   beforeEach(async () => {
     await musicService.removeAllMusic();

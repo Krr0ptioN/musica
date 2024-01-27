@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "dkr-build-api": "sh ./scripts/dkr-build-api.sh",
-    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN -d=dist/storybook/ui-shared"
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN -d=dist/storybook/ui-shared",
+    "test": "nx run api:test --testFile find-all.allbums.test.ts"
   },
   "private": true,
   "devDependencies": {

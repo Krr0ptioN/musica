@@ -9,7 +9,7 @@ import request from 'supertest';
 describe('POST /api/musics | Music creation', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   it('should create music and upload file', async () => {
     const res = await request(app.getHttpServer())

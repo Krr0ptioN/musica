@@ -9,7 +9,7 @@ import request from 'supertest';
 describe('GET /api/musics | Find and get all musics', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   beforeEach(async () => {
     await musicService.removeAllMusic();
