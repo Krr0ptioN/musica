@@ -26,6 +26,7 @@ describe('GET /api/albums/:id | Get music by id', () => {
     const albumId = result._id;
     const res = await request(app.getHttpServer()).get(`/albums/${albumId}`);
 
+    expect(res.status).toBe(200);
     expect(res.body.data.title).toBe(mockDataAlbum.title);
   });
 
