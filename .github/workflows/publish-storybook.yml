@@ -24,7 +24,7 @@ jobs:
         run: pnpm install
 
       - name: Build Storybook
-        run: nx build-storybook ui-shared
+        run: npx nx build-storybook ui-shared
 
       - name: Publish to Chromatic
         run: pnpm run chromatic
