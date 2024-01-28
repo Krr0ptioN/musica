@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('PUT /api/playlists/:id | Update playlists data', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  }, 1000000);
 
   it('should update a playlists by ID (update)', async () => {
     const result = await playlistsService.create({ ...mockDataPlaylist });

@@ -17,7 +17,11 @@ describe('PUT /api/musics/:id | Update music data', () => {
   });
 
   it('should update a music by ID (update)', async () => {
-    const result = await musicService.create({ ...mockDataMusic });
+    const result = await musicService.create({
+      ...mockDataMusic,
+      musicAudioFileName: 'file.mp3',
+      coverImageFileName: 'file.png',
+    });
     const musicId = result._id;
 
     const res = await request(app.getHttpServer())

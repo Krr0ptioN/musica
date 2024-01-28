@@ -17,11 +17,11 @@ describe('DELETE /api/musics/:id | Remove music', () => {
   });
 
   it('should remove a music by ID (remove)', async () => {
-    const result = await musicService.create({
-      name: mockDataMusic.name,
-      releaseDate: mockDataMusic.releaseDate,
-    });
-    const musicId = result.id;
+    const result = await request(app.getHttpServer())
+      .post(`/musics`)
+      .send({ ...mockDataMusic });
+
+    const musicId = result.body.data.id;
     await request(app.getHttpServer())
       .patch(`/musics/${musicId}/file/upload`)
       .attach(
