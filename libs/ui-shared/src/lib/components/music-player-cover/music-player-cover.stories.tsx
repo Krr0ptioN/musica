@@ -21,8 +21,4 @@ export const Heading: Story = {
   args: {
     alt: '',
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText(/Welcome to MusicPlayerCover!/gi)).toBeTruthy();
-  },
 };

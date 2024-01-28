@@ -19,4 +19,5 @@ export class Artist extends Document {
   updatedAt: Date;
 }
 
+export const ARTIST_SCHEMA_MODEL = 'artist';
 export const ArtistSchema = SchemaFactory.createForClass(Artist);

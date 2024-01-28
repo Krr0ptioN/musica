@@ -19,4 +19,5 @@ export class Album extends Document {
   updatedAt: Date;
 }
 
+export const ALBUM_SCHEMA_MODEL = 'album';
 export const AlbumSchema = SchemaFactory.createForClass(Album);

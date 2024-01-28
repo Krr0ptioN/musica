@@ -3,9 +3,10 @@ import {
   ServiceUnavailableException,
   Logger,
   StreamableFile,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createReadStream, unlink } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { MUSIC_SCHEMA_MODEL, Music } from '@musica/database-models';
 import { Model } from 'mongoose';
@@ -53,8 +54,11 @@ export class MusicService {
     return new StreamableFile(createReadStream(filePath));
   }
 
-  async findOne(id: string): Promise<Music | null> {
+  async findOne(id: string): Promise<Music> {
     const result = await this.musicModel.findById(id);
+    if (!result) {
+      throw new NotFoundException('Music not found');
+    }
     return result;
   }
 
@@ -79,38 +83,72 @@ export class MusicService {
     }
   }
 
+  private purgeFile(filePath: string, fileType: string) {
+    if (!filePath) {
+      this.logger.verbose(`${fileType} File path is undefined.`);
+      return;
+    }
+
+    try {
+      unlinkSync(filePath);
+      this.logger.verbose(`MUSIC REMOVE | ${filePath} File is deleted.`);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        this.logger.verbose(`${filePath} File not found.`);
+      } else {
+        this.logger.error(
+          `MUSIC REMOVE | Error deleting ${filePath}: ${error.message}`
+        );
+      }
+    }
+  }
+
   private purgeAssociatedFiles(music: Music) {
-    const audioFilePath = path.join(
-      this.configService.get(ENV_NAME.STORAGE_DEST),
-      'musics',
-      music.musicAudioFileName
-    );
+    const audioFilePath = music.musicAudioFileName
+      ? path.join(
+        this.configService.get(ENV_NAME.STORAGE_DEST),
+        'musics',
+        music.musicAudioFileName
+      )
+      : undefined;
 
-    const coverFilePath = path.join(
-      this.configService.get(ENV_NAME.STORAGE_DEST),
-      'covers',
-      music.coverImageFileName
-    );
+    const coverFilePath = music.coverImageFileName
+      ? path.join(
+        this.configService.get(ENV_NAME.STORAGE_DEST),
+        'covers',
+        music.coverImageFileName
+      )
+      : undefined;
 
-    unlink(audioFilePath, (err) => {
-      if (err) throw err;
-      this.logger.verbose(`${audioFilePath} File is deleted.`);
-    });
-    unlink(coverFilePath, (err) => {
-      if (err) throw err;
-      this.logger.verbose(`${coverFilePath} File is deleted.`);
-    });
+    this.purgeFile(audioFilePath, 'Audio');
+    this.purgeFile(coverFilePath, 'Cover');
   }
 
   async remove(id: string): Promise<boolean> {
     try {
       const music = await this.musicModel.findOneAndDelete({ _id: id });
-      if (music) {
-        this.purgeAssociatedFiles(music);
+
+      if (!music) {
+        throw new NotFoundException(`Music with ID ${id} not found`);
       }
-      return music.name ? true : false;
+
+      this.purgeAssociatedFiles(music);
+
+      return true;
     } catch (error) {
+      this.handleDatabaseError(error);
+    }
+  }
+
+  private handleDatabaseError(error): void {
+    this.logger.error(error);
+
+    if (error.name === 'ServiceUnavailableException') {
       throw new ServiceUnavailableException('Endpoint is not available');
+    } else {
+      throw new ServiceUnavailableException(
+        'Something went wrong with the database'
+      );
     }
   }
 

@@ -1,0 +1,32 @@
+name: 'Chromatic'
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Use PNPM'
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Storybook
+        run: npx nx build-storybook ui-shared
+
+      - name: Publish to Chromatic
+        run: pnpm run chromatic
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

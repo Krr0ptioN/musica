@@ -59,7 +59,7 @@ jobs:
           mongoDBVersion: 4.0
 
       - name: 'Unit Test API'
-        run: npx nx test api
+        run: npx nx test api -w 1
         env:
           INSIDE_ACTION_RUNNER: true
           MONGO_URI: 'mongodb://localhost:27017/musica'

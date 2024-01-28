@@ -25,22 +25,43 @@ import {
   multerDiskStorageMusicCoverFileImageDestination,
   audioFileFilter,
 } from '@musica/core';
+import { Album, Artist, Playlist } from '@musica/database-models';
+import { AlbumsService } from '../albums/albums.service';
+import { ArtistsService } from '../artists/artists.service';
+import { PlaylistsService } from '../playlists/playlists.service';
 
 @ApiTags('Music')
 @Controller('musics')
 export class MusicController {
-  constructor(private readonly musicService: MusicService) { }
+  constructor(
+    private readonly musicService: MusicService,
+    private readonly albumsService: AlbumsService,
+    private readonly artistsService: ArtistsService,
+    private readonly playlistsService: PlaylistsService
+  ) { }
 
   private readonly logger = new Logger(MusicController.name);
 
   @Post()
   @ApiOperation({ description: 'Create music' })
   async create(@Body() data: CreateMusicDto) {
+    if (data.artists && !data.artistIds) {
+      data.artistIds = await this.createArtists(data.artists);
+    }
+
+    if (data.album && !data.albumId) {
+      data.albumId = await this.createAlbum(data.album, data.artistIds);
+    }
+
+    if (data.playlists && !data.playlistIds) {
+      data.playlistIds = await this.createPlaylists(data.playlists);
+    }
+
     const result = await this.musicService.create({
       ...data,
     });
 
-    this.logger.debug(`MUSIC CREATE | Recieved data client:\n${result}`);
+    this.logger.debug(`MUSIC CREATE | Received data client:\n${result}`);
     return {
       message: 'Music was successfully created',
       success: true,
@@ -49,6 +70,47 @@ export class MusicController {
         id: result.id,
       },
     };
+  }
+
+  private async createArtists(artistNames: string[]): Promise<string[]> {
+    const artistIds: string[] = [];
+
+    for (const artistName of artistNames) {
+      const artistObject = await this.artistsService.create({
+        name: artistName,
+      });
+
+      const artistId: string = (artistObject as Artist).id;
+
+      artistIds.push(artistId);
+    }
+
+    return artistIds;
+  }
+
+  private async createAlbum(
+    albumName: string,
+    artistIds: string[]
+  ): Promise<string> {
+    const musicAlbum: Album = await this.albumsService.create({
+      title: albumName,
+      artistIds,
+    });
+
+    return musicAlbum.id;
+  }
+
+  private async createPlaylists(playlistNames: string[]): Promise<string[]> {
+    const playlistIds: string[] = [];
+
+    for (const playlistName of playlistNames) {
+      const playlistObject: Playlist = await this.playlistsService.create({
+        name: playlistName,
+      });
+      playlistIds.push(playlistObject.id);
+    }
+
+    return playlistIds;
   }
 
   @Patch(':id/file/upload')
@@ -137,43 +199,56 @@ export class MusicController {
   }
 
   @Get(':id/file')
+  @ApiOperation({ description: 'Create music' })
   public async getMusicFile(@Param('id') id: string) {
     return this.musicService.getMusicAudioFile(id);
   }
 
   @Get(':id/cover')
+  @ApiOperation({ description: 'Get the music cover image' })
   public async getMusicCoverFile(@Param('id') id: string) {
     return this.musicService.getMusicCoverImageFile(id);
   }
 
   @Get()
+  @ApiOperation({ description: 'Get all musics' })
   public async findAll() {
     const result = await this.musicService.findAll();
-    return { message: 'Operation was successful', data: result };
+    this.logger.verbose(
+      `MUSIC FINDALL | Number of musics retrived from user query: ${result.length}`
+    );
+    return { success: true, message: 'Operation was successful', data: result };
   }
 
   @Get(':id')
+  @ApiOperation({ description: 'Get a specific music' })
   public async findOne(@Param('id') id: string) {
     const result = await this.musicService.findOne(id);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Data Retrived from user query:\n${result}`);
-    return { message: 'Operation was successful', data: result };
+    this.logger.debug(`MUSIC FINDONE | Request parameters: ${id}`);
+    this.logger.verbose(
+      `MUSIC FINDONE | Data Retrived from user query:\n${result}`
+    );
+    return { success: true, message: 'Operation was successful', data: result };
   }
 
   @Put(':id')
+  @ApiOperation({ description: 'Update music detail specific music' })
   public async update(@Param('id') id: string, @Body() data: UpdateMusicDto) {
     const result = await this.musicService.update(id, data);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Music info updated to:\n${result}`);
-    return { message: 'Music successfully updated' };
+    this.logger.debug(`MUSIC UPDATE | Request parameters: ${id}`);
+    this.logger.verbose(`MUSIC UPDATE | Music info updated to:\n${result}`);
+    return { success: true, message: 'Music successfully updated' };
   }
 
   @Delete(':id')
+  @ApiOperation({ description: "Remove a music with it's file" })
   public async remove(@Param('id') id: string) {
     const result = await this.musicService.remove(id);
-    this.logger.debug(`Request parameters: ${id}`);
-    this.logger.verbose(`Music successfully deleted:\n${result}`);
+    this.logger.debug(`MUSIC REMOVE | Request parameters: ${id}`);
+    this.logger.verbose(
+      `MUSIC REMOVE | Music successfully deleted: ${result}`
+    );
     if (!result) throw new BadRequestException(`Failed to delete object`);
-    return { message: 'Music successfully deleted' };
+    return { success: true, message: 'Music successfully deleted' };
   }
 }
