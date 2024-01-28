@@ -20,7 +20,7 @@ let playlistsService: PlaylistsService;
 
 export const setupTestEnvironment = async () => {
   if (process.env.INSIDE_ACTION_RUNNER === 'false') {
-    mongoMemoryServerSetup();
+    await mongoMemoryServerSetup();
   }
 
   jest.resetModules();
@@ -53,22 +53,10 @@ export const tearDownTestEnvironment = async () => {
   if (!process.env.INSIDE_ACTION_RUNNER) await mongoMemoryServerTeardown();
 };
 
-const mockDataMusic = {
-  name: 'Music #1',
-  releaseDate: new Date(),
-};
-
-const mockDataAlbum = {
-  title: 'Album #1',
-};
-
-const mockDataPlaylist = {
-  name: 'Playlist #1',
-};
-
-const mockDataArtist = {
-  name: 'Playlist #1',
-};
+const mockDataMusic = {name: 'Music #1',releaseDate: new Date()}
+const mockDataAlbum = {  title: 'Album #1'}
+const mockDataPlaylist = {  name: 'Playlist #1'}
+const mockDataArtist = {  name: 'Playlist #1'}
 
 export {
   app,

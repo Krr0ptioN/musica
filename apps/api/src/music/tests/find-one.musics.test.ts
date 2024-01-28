@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('GET /api/musics/:id | Get music by id', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   beforeEach(async () => {
     await musicService.removeAllMusic();
@@ -26,7 +26,7 @@ describe('GET /api/musics/:id | Get music by id', () => {
 
     const res = await request(app.getHttpServer()).get(`/musics/${musicId}`);
 
-    expect(res.body.data.name).toBe(mockDataMusic.name);
+    expect(res.body?.data?.name).toBe(mockDataMusic.name);
   });
 
   afterAll(async () => {

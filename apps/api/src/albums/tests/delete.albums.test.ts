@@ -12,7 +12,7 @@ import request from 'supertest';
 describe('DELETE /api/albums/:id | Remove music', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   it('should remove a album by ID (remove)', async () => {
     const artist = await artistsService.create({ ...mockDataArtist });

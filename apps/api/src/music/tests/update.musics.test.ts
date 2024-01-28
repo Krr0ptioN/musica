@@ -10,7 +10,7 @@ import request from 'supertest';
 describe('PUT /api/musics/:id | Update music data', () => {
   beforeAll(async () => {
     await setupTestEnvironment();
-  }, 100000);
+  });
 
   beforeEach(async () => {
     await musicService.removeAllMusic();
